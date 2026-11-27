@@ -1,0 +1,658 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 2674
+  },
+  {
+    "path": "brand-tokens.json",
+    "bytes": 304
+  },
+  {
+    "path": "AGENTS.md",
+    "bytes": 2674
+  },
+  {
+    "path": "03-android/google-play-icon-512.png",
+    "bytes": 69726,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "path": "02-web/pwa-maskable-512.png",
+    "bytes": 45663,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "path": "02-web/favicon-48x48.png",
+    "bytes": 1995,
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "path": "02-web/site.webmanifest",
+    "bytes": 694
+  },
+  {
+    "path": "02-web/apple-touch-icon.png",
+    "bytes": 12112,
+    "size": [
+      180,
+      180
+    ]
+  },
+  {
+    "path": "02-web/google-site-icon-512.png",
+    "bytes": 69726,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "path": "02-web/favicon.ico",
+    "bytes": 36877
+  },
+  {
+    "path": "02-web/pwa-maskable-192.png",
+    "bytes": 9238,
+    "size": [
+      192,
+      192
+    ]
+  },
+  {
+    "path": "02-web/favicon-32x32.png",
+    "bytes": 1180,
+    "size": [
+      32,
+      32
+    ]
+  },
+  {
+    "path": "02-web/favicon-16x16.png",
+    "bytes": 505,
+    "size": [
+      16,
+      16
+    ]
+  },
+  {
+    "path": "05-expo/app-config-example.json",
+    "bytes": 295
+  },
+  {
+    "path": "05-expo/favicon.png",
+    "bytes": 1995,
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "path": "05-expo/splash-icon.png",
+    "bytes": 85884,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "path": "05-expo/icon.png",
+    "bytes": 205731,
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "path": "05-expo/adaptive-icon.png",
+    "bytes": 160942,
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "path": "06-admin/sidebar-icon-64.png",
+    "bytes": 2719,
+    "size": [
+      64,
+      64
+    ]
+  },
+  {
+    "path": "06-admin/login-logo-dark.png",
+    "bytes": 69958,
+    "size": [
+      1500,
+      400
+    ]
+  },
+  {
+    "path": "06-admin/sidebar-icon-128.png",
+    "bytes": 7084,
+    "size": [
+      128,
+      128
+    ]
+  },
+  {
+    "path": "06-admin/login-logo-light.png",
+    "bytes": 39589,
+    "size": [
+      1500,
+      400
+    ]
+  },
+  {
+    "path": "06-admin/sidebar-icon-256.png",
+    "bytes": 21504,
+    "size": [
+      256,
+      256
+    ]
+  },
+  {
+    "path": "06-admin/sidebar-icon-32.png",
+    "bytes": 1180,
+    "size": [
+      32,
+      32
+    ]
+  },
+  {
+    "path": "01-logos/symbol-transparent.png",
+    "bytes": 233936,
+    "size": [
+      682,
+      654
+    ]
+  },
+  {
+    "path": "01-logos/stacked-dark.png",
+    "bytes": 158023,
+    "size": [
+      1000,
+      1000
+    ]
+  },
+  {
+    "path": "01-logos/symbol-light-background.png",
+    "bytes": 87425,
+    "size": [
+      682,
+      654
+    ]
+  },
+  {
+    "path": "01-logos/stacked-light.png",
+    "bytes": 62729,
+    "size": [
+      1000,
+      1000
+    ]
+  },
+  {
+    "path": "01-logos/horizontal-light.png",
+    "bytes": 39589,
+    "size": [
+      1500,
+      400
+    ]
+  },
+  {
+    "path": "01-logos/horizontal-dark.png",
+    "bytes": 69958,
+    "size": [
+      1500,
+      400
+    ]
+  },
+  {
+    "path": "04-ios/app-store-1024.png",
+    "bytes": 205731,
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "path": "07-social/profile-1024.png",
+    "bytes": 205731,
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "path": "07-social/profile-256.png",
+    "bytes": 21504,
+    "size": [
+      256,
+      256
+    ]
+  },
+  {
+    "path": "07-social/og-image-1200x630.png",
+    "bytes": 68652,
+    "size": [
+      1200,
+      630
+    ]
+  },
+  {
+    "path": "07-social/profile-512.png",
+    "bytes": 69726,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "path": "00-master/approved-option-4-original.png",
+    "bytes": 1211927,
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  {
+    "path": "00-master/approval-screenshot.png",
+    "bytes": 1414730,
+    "size": [
+      2048,
+      1280
+    ]
+  },
+  {
+    "path": "00-master/approved-symbol-navy.png",
+    "bytes": 418741,
+    "size": [
+      802,
+      802
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ipad-76pt-2x.png",
+    "bytes": 9237,
+    "size": [
+      152,
+      152
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/iphone-40pt-3x.png",
+    "bytes": 6542,
+    "size": [
+      120,
+      120
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/iphone-60pt-3x.png",
+    "bytes": 12112,
+    "size": [
+      180,
+      180
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ipad-83.5pt-2x.png",
+    "bytes": 10648,
+    "size": [
+      167,
+      167
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ipad-40pt-1x.png",
+    "bytes": 1569,
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ipad-40pt-2x.png",
+    "bytes": 3708,
+    "size": [
+      80,
+      80
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/iphone-60pt-2x.png",
+    "bytes": 6542,
+    "size": [
+      120,
+      120
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ipad-29pt-1x.png",
+    "bytes": 1024,
+    "size": [
+      29,
+      29
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ipad-76pt-1x.png",
+    "bytes": 3497,
+    "size": [
+      76,
+      76
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ipad-20pt-1x.png",
+    "bytes": 613,
+    "size": [
+      20,
+      20
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/iphone-40pt-2x.png",
+    "bytes": 3708,
+    "size": [
+      80,
+      80
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/iphone-20pt-2x.png",
+    "bytes": 1569,
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/iphone-29pt-2x.png",
+    "bytes": 2486,
+    "size": [
+      58,
+      58
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ipad-20pt-2x.png",
+    "bytes": 1569,
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ipad-29pt-2x.png",
+    "bytes": 2486,
+    "size": [
+      58,
+      58
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/Contents.json",
+    "bytes": 2245
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/iphone-20pt-3x.png",
+    "bytes": 2516,
+    "size": [
+      60,
+      60
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/ios-marketing-1024pt-1x.png",
+    "bytes": 205731,
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "path": "04-ios/AppIcon.appiconset/iphone-29pt-3x.png",
+    "bytes": 4180,
+    "size": [
+      87,
+      87
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-1024.png",
+    "bytes": 205731,
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-512.png",
+    "bytes": 69726,
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-96.png",
+    "bytes": 4811,
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-192.png",
+    "bytes": 13235,
+    "size": [
+      192,
+      192
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-256.png",
+    "bytes": 21504,
+    "size": [
+      256,
+      256
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-32.png",
+    "bytes": 1180,
+    "size": [
+      32,
+      32
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-128.png",
+    "bytes": 7084,
+    "size": [
+      128,
+      128
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-64.png",
+    "bytes": 2719,
+    "size": [
+      64,
+      64
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-48.png",
+    "bytes": 1995,
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-16.png",
+    "bytes": 505,
+    "size": [
+      16,
+      16
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-180.png",
+    "bytes": 12112,
+    "size": [
+      180,
+      180
+    ]
+  },
+  {
+    "path": "02-web/icons/icon-384.png",
+    "bytes": 42341,
+    "size": [
+      384,
+      384
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+    "bytes": 23189,
+    "size": [
+      324,
+      324
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-xxhdpi/ic_launcher.png",
+    "bytes": 8590,
+    "size": [
+      144,
+      144
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-xxhdpi/ic_launcher_round.png",
+    "bytes": 6667,
+    "size": [
+      144,
+      144
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-anydpi-v26/ic_launcher.xml",
+    "bytes": 215
+  },
+  {
+    "path": "03-android/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+    "bytes": 215
+  },
+  {
+    "path": "03-android/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+    "bytes": 38468,
+    "size": [
+      432,
+      432
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-xxxhdpi/ic_launcher.png",
+    "bytes": 13235,
+    "size": [
+      192,
+      192
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-xxxhdpi/ic_launcher_round.png",
+    "bytes": 10211,
+    "size": [
+      192,
+      192
+    ]
+  },
+  {
+    "path": "03-android/res/values/colors.xml",
+    "bytes": 75
+  },
+  {
+    "path": "03-android/res/mipmap-mdpi/ic_launcher_foreground.png",
+    "bytes": 4186,
+    "size": [
+      108,
+      108
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-mdpi/ic_launcher.png",
+    "bytes": 1995,
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-mdpi/ic_launcher_round.png",
+    "bytes": 1607,
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-xhdpi/ic_launcher_foreground.png",
+    "bytes": 11711,
+    "size": [
+      216,
+      216
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-xhdpi/ic_launcher.png",
+    "bytes": 4811,
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-xhdpi/ic_launcher_round.png",
+    "bytes": 3846,
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-hdpi/ic_launcher_foreground.png",
+    "bytes": 7662,
+    "size": [
+      162,
+      162
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-hdpi/ic_launcher.png",
+    "bytes": 3261,
+    "size": [
+      72,
+      72
+    ]
+  },
+  {
+    "path": "03-android/res/mipmap-hdpi/ic_launcher_round.png",
+    "bytes": 2561,
+    "size": [
+      72,
+      72
+    ]
+  }
+]
