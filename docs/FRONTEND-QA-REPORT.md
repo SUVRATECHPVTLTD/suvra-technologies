@@ -63,7 +63,7 @@
 
 1. **Cloudflare Backend Implementation**: Provision Cloudflare Workers + Hono, D1 + Drizzle ORM, R2, Turnstile, Zero Trust admin console, and OCI backup pipelines per `docs/BACKEND-INTEGRATION-CONTRACT.md`.
 2. **Production Domain & Indexing Activation**: Once the official domain is purchased, configure `SITE_URL` / `VITE_SITE_URL`, set `ALLOW_INDEXING=true` / `VITE_ALLOW_INDEXING=true`, and add `GOOGLE_SITE_VERIFICATION` / `VITE_GSC_VERIFICATION` in Cloudflare deployment settings.
-3. **Verified Media & Legal Finalization**: Upload a real photograph of Ravi Ranjan to replace the labelled Founder portrait placeholder; finalize legal review of `/privacy-policy`, `/terms-and-conditions`, and `/cookie-policy`.
+3. **Legal Draft Finalization**: Finalize legal review of `/privacy-policy`, `/terms-and-conditions`, and `/cookie-policy`. *(Note: The Founder & CEO profile intentionally uses a professional, photo-free, typography-based executive presentation; a personal photograph is not required.)*
 
 ---
 

@@ -73,8 +73,10 @@ export function Header() {
     <>
       <header ref={headerRef} className="sticky top-0 z-40 px-3 sm:px-6 lg:px-8 pt-2.5 sm:pt-3 pointer-events-none">
         <div
-          className={`pointer-events-auto relative max-w-7xl mx-auto rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)]/92 backdrop-blur-md transition-all duration-200 ${
-            scrolled ? 'shadow-[var(--shadow-card)]' : 'shadow-xs'
+          className={`pointer-events-auto relative max-w-7xl mx-auto rounded-2xl border bg-[var(--bg-canvas)]/90 backdrop-blur-xl transition-all duration-200 ${
+            scrolled
+              ? 'border-[var(--border-strong)]/80 shadow-[var(--shadow-card)]'
+              : 'border-[var(--border-subtle)] shadow-xs'
           }`}
         >
           <div

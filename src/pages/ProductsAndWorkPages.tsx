@@ -23,6 +23,7 @@ export function ProductsPage() {
         <Container>
           <Breadcrumbs items={[{ label: 'Products' }]} />
           <SectionHeader
+            as="h1"
             align="left"
             eyebrow="Product Innovation Roadmap"
             title="Proprietary software, mobile, SaaS, and AI initiatives."
@@ -74,6 +75,7 @@ export function PortfolioPage() {
         <Container>
           <Breadcrumbs items={[{ label: 'Portfolio' }]} />
           <SectionHeader
+            as="h1"
             align="left"
             eyebrow="Work & Blueprints"
             title="Concept demonstrations & engineering architecture showcases."
@@ -139,6 +141,7 @@ export function CaseStudiesIndexPage() {
         <Container>
           <Breadcrumbs items={[{ label: 'Case Studies' }]} />
           <SectionHeader
+            as="h1"
             align="left"
             eyebrow="Technical Case Blueprints"
             title="Challenge, architecture, and intended outcomes."

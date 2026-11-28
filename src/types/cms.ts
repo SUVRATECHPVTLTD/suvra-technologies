@@ -115,6 +115,26 @@ export interface EnquiryPayload {
   consent: boolean;
 }
 
+export interface FounderProfile {
+  name: string;
+  designation: string;
+  company: string;
+  positioning: string;
+  establishedYear: number;
+  headquarters: string;
+  linkedInUrl: string;
+  email: string;
+  supportingHeadline: string;
+  supportingBiography: string;
+  suvrixaDisclosure: string;
+  displayMode: 'editorial_typography';
+  /** Optional future media configuration; disabled by default per permanent privacy preference. */
+  optionalMedia?: {
+    enabled: boolean;
+    imageUrl?: string | null;
+  };
+}
+
 export interface ApiResult<T> {
   ok: boolean;
   source: 'local-fixture' | 'cloudflare-worker';

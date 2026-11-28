@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ArrowRight, ExternalLink, Mail, MessageSquare, User } from 'lucide-react';
-import { motion } from 'motion/react';
+import { ArrowRight, Mail, MessageSquare } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { TRANSITION_MICRO } from '../../config/motion';
 import { SITE_CONFIG } from '../../config/site';
@@ -11,35 +11,69 @@ import {
   PRODUCT_DIRECTIONS,
 } from '../../data/company';
 import type { ProjectConcept } from '../../types/cms';
-import { BlogCard, ProductCard, ProjectCard } from '../cards/DomainCards';
-import { BrandSymbol } from '../ui/BrandMark';
+import { ProjectCard } from '../cards/DomainCards';
+import { FounderExecutiveProfile } from '../company/FounderExecutiveProfile';
 import { Container, SectionHeader } from '../ui/Container';
 import { FAQAccordion } from '../ui/FAQAccordion';
+import { RevealOnScroll } from '../ui/MotionPrimitives';
 
 export function ProductsPreview() {
   return (
     <section className="py-20 sm:py-24 bg-[var(--bg-canvas)] border-t border-[var(--border-subtle)]">
       <Container>
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
-          <SectionHeader
-            align="left"
-            eyebrow="Products & Innovation"
-            title="Proprietary product direction in active research and architecture."
-            description="We do not announce unverified launches. Below are the four product pillars guiding our internal R&D roadmap."
-          />
-          <Link
-            to="/products"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-[#2563EB] dark:text-[#06B6D4] whitespace-nowrap"
-          >
-            <span>Explore Products Roadmap</span>
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </Link>
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+          <RevealOnScroll direction="right" distance={16} className="lg:col-span-5 lg:sticky lg:top-24">
+            <SectionHeader
+              align="left"
+              eyebrow="Products & Innovation"
+              title="Proprietary product direction in active research and architecture."
+              description="We do not announce unverified launches. Below are the four product pillars guiding our internal R&D roadmap."
+            />
+            <div className="mt-7">
+              <Link
+                to="/products"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-[#2563EB] hover:bg-[#1D4ED8] rounded-lg transition-colors whitespace-nowrap"
+              >
+                <span>Explore Products Roadmap</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </RevealOnScroll>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {PRODUCT_DIRECTIONS.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          <div className="lg:col-span-7 divide-y divide-[var(--border-subtle)] border-t border-b border-[var(--border-subtle)]">
+            {PRODUCT_DIRECTIONS.map((product, idx) => (
+              <RevealOnScroll
+                key={product.id}
+                delay={idx * 0.05}
+                className="py-6 sm:py-7 grid grid-cols-1 sm:grid-cols-12 gap-4 items-start"
+              >
+                <div className="sm:col-span-5">
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+                    <span className="font-mono tabular-nums text-[#2563EB] dark:text-[#06B6D4]">
+                      0{idx + 1}
+                    </span>
+                    <span aria-hidden="true">·</span>
+                    <span>{product.category}</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-lg font-semibold text-[var(--text-primary)]">
+                    {product.title}
+                  </h3>
+                  <p className="mt-1 font-mono text-[11px] text-[#2563EB] dark:text-[#06B6D4]">
+                    {product.status}
+                  </p>
+                </div>
+
+                <div className="sm:col-span-7">
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                    {product.summary}
+                  </p>
+                  <p className="mt-3 text-xs text-[var(--text-muted)]">
+                    {product.focusAreas.join(' · ')}
+                  </p>
+                </div>
+              </RevealOnScroll>
+            ))}
+          </div>
         </div>
       </Container>
     </section>
@@ -112,11 +146,23 @@ export function PortfolioPreview() {
           })}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {items.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
-          ))}
-        </div>
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <AnimatePresence mode="popLayout">
+            {items.map((project) => (
+              <motion.div
+                layout
+                key={project.slug}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={TRANSITION_MICRO}
+                className="flex"
+              >
+                <ProjectCard project={project} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </Container>
     </section>
   );
@@ -126,64 +172,15 @@ export function FounderSection() {
   return (
     <section className="py-20 sm:py-24 bg-[var(--bg-canvas)] border-t border-[var(--border-subtle)]">
       <Container>
-        <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-7 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-4">
-            <div className="relative rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-8 flex flex-col items-center justify-center text-center aspect-[4/3]">
-              <div className="absolute top-3.5 right-3.5 opacity-80">
-                <BrandSymbol className="h-6" />
-              </div>
-              <div className="w-16 h-16 rounded-full border border-[var(--border-strong)] bg-[var(--bg-surface)] flex items-center justify-center mb-3">
-                <User className="w-7 h-7 text-[#2563EB] dark:text-[#06B6D4]" aria-hidden="true" />
-              </div>
-              <p className="font-display text-base font-semibold text-[var(--text-primary)]">
-                {SITE_CONFIG.founderName}
-              </p>
-              <p className="mt-1 font-mono text-[11px] text-[var(--text-muted)]">
-                Verified Founder Portrait Pending
-              </p>
-            </div>
-          </div>
-
-          <div className="lg:col-span-8">
-            <p className="font-mono text-xs text-[#2563EB] dark:text-[#06B6D4] mb-2">
-              Founder &amp; Leadership
-            </p>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
-              {SITE_CONFIG.founderName} — {SITE_CONFIG.founderTitle}
-            </h2>
-            <p className="mt-4 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
-              Leading Suvra Technologies from Muzaffarpur, Bihar since 2026 with a clear focus on trustworthy software engineering, disciplined cloud economics, and internationally competitive digital systems.
-            </p>
-            <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed">
-              {SITE_CONFIG.suvrixaNote}
-            </p>
-
-            <div className="mt-6 flex flex-wrap items-center gap-4">
-              <Link
-                to="/founder"
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-[#2563EB] hover:bg-[#1D4ED8] rounded-lg transition-colors whitespace-nowrap"
-              >
-                <span>Founder Profile</span>
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </Link>
-              <a
-                href={SITE_CONFIG.founderLinkedIn}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[var(--text-primary)] border border-[var(--border-strong)] rounded-lg hover:bg-[var(--bg-elevated)] transition-colors whitespace-nowrap"
-              >
-                <span>Connect on LinkedIn</span>
-                <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-        </div>
+        <FounderExecutiveProfile variant="home" />
       </Container>
     </section>
   );
 }
 
 export function BlogPreview() {
+  const [leadArticle, ...otherArticles] = BLOG_ARTICLES;
+
   return (
     <section className="py-20 sm:py-24 bg-[var(--bg-surface)] border-t border-[var(--border-subtle)]">
       <Container>
@@ -203,10 +200,59 @@ export function BlogPreview() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {BLOG_ARTICLES.map((article) => (
-            <BlogCard key={article.slug} article={article} />
-          ))}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {leadArticle && (
+            <Link
+              to={`/blog/${leadArticle.slug}`}
+              className="group lg:col-span-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-7 sm:p-9 flex flex-col justify-between transition-all duration-200 hover:border-[#2563EB]/60 dark:hover:border-[#06B6D4]/60 hover:shadow-[var(--shadow-card)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
+            >
+              <div>
+                <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+                  <span>{leadArticle.category}</span>
+                  <span aria-hidden="true">·</span>
+                  <span className="font-mono">{leadArticle.readTime}</span>
+                </div>
+                <h3 className="mt-4 font-display text-2xl sm:text-3xl font-bold text-[var(--text-primary)] group-hover:text-[#2563EB] dark:group-hover:text-[#06B6D4] transition-colors">
+                  {leadArticle.title}
+                </h3>
+                <p className="mt-3 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
+                  {leadArticle.summary}
+                </p>
+              </div>
+              <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#2563EB] dark:text-[#06B6D4]">
+                <span>Read Featured Essay</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
+              </span>
+            </Link>
+          )}
+
+          <div className="lg:col-span-6 divide-y divide-[var(--border-subtle)] border-t border-b border-[var(--border-subtle)] flex flex-col justify-between">
+            {otherArticles.map((article) => (
+              <Link
+                key={article.slug}
+                to={`/blog/${article.slug}`}
+                className="group py-5 flex items-start justify-between gap-4 hover:bg-[var(--bg-canvas)]/60 px-3 -mx-3 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
+              >
+                <div>
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+                    <span>{article.category}</span>
+                    <span aria-hidden="true">·</span>
+                    <span className="font-mono">{article.readTime}</span>
+                  </div>
+                  <h3 className="mt-1.5 font-display text-base sm:text-lg font-semibold text-[var(--text-primary)] group-hover:text-[#2563EB] dark:group-hover:text-[#06B6D4] transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="mt-1 text-xs sm:text-sm text-[var(--text-secondary)] line-clamp-2">
+                    {article.summary}
+                  </p>
+                </div>
+                <ArrowRight
+                  className="w-4 h-4 shrink-0 mt-1 text-[#2563EB] dark:text-[#06B6D4] transition-transform duration-200 group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
+            ))}
+          </div>
         </div>
       </Container>
     </section>
@@ -246,8 +292,12 @@ export function ContactCTA() {
   return (
     <section className="py-20 bg-[#071426] text-[#F8FAFC] border-t border-slate-800">
       <Container>
-        <div className="rounded-2xl border border-slate-800 bg-gradient-to-br from-[#0F172A] via-[#071426] to-[#102542] p-8 sm:p-12 lg:p-14 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-          <div className="max-w-2xl">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-[#0F172A] via-[#071426] to-[#102542] p-8 sm:p-12 lg:p-14 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 -top-24 w-80 h-80 rounded-full bg-radial from-[#2563EB]/20 to-transparent blur-2xl"
+          />
+          <div className="relative z-10 max-w-2xl">
             <p className="font-mono text-xs text-[#06B6D4] mb-3">Ready When You Are</p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white">
               Let&apos;s build what comes next.
@@ -257,7 +307,7 @@ export function ContactCTA() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="relative z-10 flex flex-wrap items-center gap-3 shrink-0">
             <Link
               to="/start-a-project"
               className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#2563EB] hover:bg-[#1D4ED8] rounded-lg transition-all active:scale-[0.98] whitespace-nowrap"

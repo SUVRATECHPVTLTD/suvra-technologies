@@ -10,6 +10,7 @@ import { AnimatedHeading } from '../components/ui/MotionPrimitives';
 import { SeoHead } from '../components/ui/SeoHead';
 import { ServiceDiagram } from '../components/ui/ServiceDiagram';
 import { CURRENCY_CONFIG, QUOTATION_LABELS } from '../config/currency';
+import { getPublicServicePricing, getServiceDeliverables } from '../config/pricing';
 import { SITE_CONFIG } from '../config/site';
 import {
   SERVICE_CATEGORIES,
@@ -35,6 +36,7 @@ export function ServicesIndexPage() {
         <Container>
           <Breadcrumbs items={[{ label: 'Services' }]} />
           <SectionHeader
+            as="h1"
             align="left"
             eyebrow="14 Core Capabilities"
             title="Engineering, intelligence, digital design, and cloud services."
@@ -126,6 +128,8 @@ export function ServiceDetailPage() {
   const related = service.relatedSlugs
     .map((relSlug) => getServiceBySlug(relSlug))
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
+  const publicPricing = getPublicServicePricing(service.slug);
+  const serviceDeliverables = getServiceDeliverables(service.slug);
 
   return (
     <>
@@ -284,9 +288,32 @@ export function ServiceDetailPage() {
           </div>
 
           <div className="pt-10 border-t border-[var(--border-subtle)]">
-            <h2 className="font-display text-2xl font-bold text-[var(--text-primary)] mb-6">
+            <h2 className="font-display text-2xl font-bold text-[var(--text-primary)] mb-2">
               Structured Deliverables
             </h2>
+            <p className="text-sm text-[var(--text-secondary)] mb-6">
+              Core outcomes and implementation milestones scoped for {service.name}.
+            </p>
+
+            {serviceDeliverables.length > 0 && (
+              <div className="mb-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-6">
+                <p className="font-mono text-xs text-[#2563EB] dark:text-[#06B6D4] mb-3">
+                  Key Service Deliverables
+                </p>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-[var(--text-secondary)]">
+                  {serviceDeliverables.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <Check
+                        className="w-4 h-4 text-[#2563EB] dark:text-[#06B6D4] shrink-0 mt-0.5"
+                        aria-hidden="true"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {[
                 {
@@ -337,20 +364,33 @@ export function ServiceDetailPage() {
           </div>
 
           <div className="pt-10 border-t border-[var(--border-subtle)]">
-            <div className="rounded-2xl border border-[#2563EB]/45 bg-[var(--bg-canvas)] p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <div className="rounded-2xl border border-[#2563EB]/45 bg-[#071426] text-[#F8FAFC] p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
               <div className="lg:col-span-8">
-                <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]">
-                  <span className="font-mono text-[#2563EB] dark:text-[#06B6D4]">
-                    {QUOTATION_LABELS.customPricing}
+                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-300">
+                  <span className="font-mono text-[#06B6D4]">
+                    {publicPricing.pricingTypeLabel}
                   </span>
                   <span aria-hidden="true">·</span>
                   <span>Currency: {CURRENCY_CONFIG.code} ({CURRENCY_CONFIG.symbol})</span>
+                  {publicPricing.estimatedDuration && (
+                    <>
+                      <span aria-hidden="true">·</span>
+                      <span>Typical Timeline: {publicPricing.estimatedDuration}</span>
+                    </>
+                  )}
                 </div>
-                <h2 className="mt-2 font-display text-2xl font-bold text-[var(--text-primary)]">
-                  Scope &amp; Quotation for {service.name}
-                </h2>
-                <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed max-w-2xl">
-                  {QUOTATION_LABELS.discoveryNote} Share your goals to receive an itemized INR milestone estimate without hidden retainers.
+                <div className="mt-2 flex flex-wrap items-baseline gap-2.5">
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
+                    {publicPricing.displayPrice}
+                  </h2>
+                  {publicPricing.billingSuffix && (
+                    <span className="text-xs font-mono text-[#38BDF8]">
+                      {publicPricing.billingSuffix}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-2 text-sm text-slate-300 leading-relaxed max-w-2xl">
+                  {publicPricing.approvalNotice} Share your goals for {service.name} to receive an itemized INR milestone proposal without hidden retainers.
                 </p>
               </div>
               <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-3">
@@ -358,7 +398,7 @@ export function ServiceDetailPage() {
                   to={`/start-a-project?service=${encodeURIComponent(service.name)}`}
                   className="inline-flex items-center gap-2 px-5 py-3 text-sm font-medium text-white bg-[#2563EB] hover:bg-[#1D4ED8] rounded-lg transition-colors whitespace-nowrap"
                 >
-                  <span>{QUOTATION_LABELS.requestQuote}</span>
+                  <span>{publicPricing.ctaLabel}</span>
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </Link>
               </div>

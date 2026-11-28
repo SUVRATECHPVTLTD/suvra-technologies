@@ -15,8 +15,9 @@ import {
   Smartphone,
   Wrench,
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { MOTION_EASING, staggerContainerVariants, staggerItemVariants } from '../../config/motion';
 import { SERVICE_CATEGORIES, getServicesByCategory } from '../../data/services';
 
 const SERVICE_ICONS: Record<string, typeof Globe> = {
@@ -37,24 +38,31 @@ const SERVICE_ICONS: Record<string, typeof Globe> = {
 };
 
 export function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 6 }}
-      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 8, scale: 0.99 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 6, scale: 0.99 }}
+      transition={{ duration: 0.2, ease: MOTION_EASING }}
       role="region"
       id="header-services-megamenu"
       aria-label="Services Mega Menu"
-      className="absolute left-0 right-0 top-full mt-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-xl z-40 overflow-hidden"
+      className="absolute left-0 right-0 top-full mt-2.5 rounded-2xl border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-2xl z-40 overflow-hidden"
     >
       <div className="px-6 lg:px-8 py-7">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <motion.div
+            variants={staggerContainerVariants}
+            initial={prefersReducedMotion ? 'visible' : 'hidden'}
+            animate="visible"
+            className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
             {SERVICE_CATEGORIES.map((category) => {
               const items = getServicesByCategory(category.id);
               return (
-                <div key={category.id}>
+                <motion.div key={category.id} variants={staggerItemVariants}>
                   <p className="font-mono text-xs font-medium text-[#2563EB] dark:text-[#06B6D4] pb-2 mb-3 border-b border-[var(--border-subtle)]">
                     {category.label}
                   </p>
@@ -85,10 +93,10 @@ export function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
                       );
                     })}
                   </ul>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
 
           <div className="lg:col-span-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 flex flex-col justify-between">
             <div>

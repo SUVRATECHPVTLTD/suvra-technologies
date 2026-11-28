@@ -2,102 +2,67 @@ import { useRef, useState } from 'react';
 import { ArrowRight, CheckCircle2, Layers, XCircle } from 'lucide-react';
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { MOTION_EASING, TRANSITION_MICRO } from '../../config/motion';
-import { COMPARISON_ROWS } from '../../data/company';
+import { MOTION_EASING, TRANSITION_MICRO, svgPathDrawVariants } from '../../config/motion';
 import { SERVICE_CATEGORIES, SERVICES_DATA, getServicesByCategory } from '../../data/services';
-import type { ServiceCategoryId } from '../../types/cms';
+import type { ServiceCategoryId, ServiceItem } from '../../types/cms';
 import { ServiceCard } from '../cards/DomainCards';
 import { Container, SectionHeader } from '../ui/Container';
-import { StaggerGrid, StaggerItem } from '../ui/MotionPrimitives';
+import { RevealOnScroll, TextMaskReveal } from '../ui/MotionPrimitives';
+
+const HOMEPAGE_PRIORITY_SLUGS = [
+  'website-development',
+  'mobile-app-development',
+  'custom-software-development',
+  'ai-business-automation',
+  'digital-marketing',
+  'seo-local-seo',
+] as const;
+
+type ServiceFilterKey = 'featured' | 'all' | ServiceCategoryId;
 
 export function CoreServicesSection() {
-  const [selectedCategory, setSelectedCategory] = useState<ServiceCategoryId | 'all'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<ServiceFilterKey>('featured');
 
-  const marqueeServices = SERVICES_DATA.slice(0, 4);
-  const filteredServices =
-    selectedCategory === 'all' ? SERVICES_DATA : getServicesByCategory(selectedCategory);
+  const featuredServices = HOMEPAGE_PRIORITY_SLUGS.map((slug) =>
+    SERVICES_DATA.find((s) => s.slug === slug)
+  ).filter((item): item is ServiceItem => Boolean(item));
+
+  const visibleServices =
+    selectedFilter === 'featured'
+      ? featuredServices
+      : selectedFilter === 'all'
+        ? SERVICES_DATA
+        : getServicesByCategory(selectedFilter);
+
+  const filterButtons: Array<{ id: ServiceFilterKey; label: string }> = [
+    { id: 'featured', label: 'Core 6 Services' },
+    { id: 'all', label: `All ${SERVICES_DATA.length} Services` },
+    ...SERVICE_CATEGORIES.map((cat) => ({ id: cat.id, label: cat.label })),
+  ];
 
   return (
     <section className="py-20 sm:py-24 bg-[var(--bg-surface)] border-t border-[var(--border-subtle)]">
       <Container>
         <SectionHeader
-          eyebrow="14 Core Services"
-          title="Comprehensive engineering, intelligence, digital, and cloud capabilities."
-          description="Explore our services grouped across four coherent practices. Every offering connects to its own dedicated architectural overview."
+          eyebrow="Core Technology Services"
+          title="Conversion-focused engineering, AI automation, and digital growth."
+          description="Six core service pillars engineered with clear deliverables and transparent INR scoping—backed by our full 14-service catalog."
         />
 
-        <StaggerGrid className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-5 mb-14">
-          {marqueeServices.map((svc, idx) => {
-            const isWide = idx === 0 || idx === 3;
-            return (
-              <StaggerItem key={svc.slug} className={isWide ? 'lg:col-span-7' : 'lg:col-span-5'}>
-                <Link
-                  to={`/services/${svc.slug}`}
-                  className="group h-full rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-6 sm:p-8 flex flex-col justify-between transition-all duration-200 hover:border-[#2563EB]/60 dark:hover:border-[#06B6D4]/60 hover:-translate-y-0.5 hover:shadow-[var(--shadow-card)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
-                >
-                  <div>
-                    <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
-                      <span>{svc.categoryLabel}</span>
-                      <span className="font-mono text-[#2563EB] dark:text-[#06B6D4]">0{idx + 1}</span>
-                    </div>
-                    <h3 className="mt-3 font-display text-xl sm:text-2xl font-semibold text-[var(--text-primary)] group-hover:text-[#2563EB] dark:group-hover:text-[#06B6D4] transition-colors">
-                      {svc.name}
-                    </h3>
-                    <p className="mt-2.5 text-sm text-[var(--text-secondary)] leading-relaxed max-w-2xl">
-                      {svc.shortDescription}
-                    </p>
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between gap-4">
-                    <span className="font-mono text-xs text-[var(--text-muted)] truncate">
-                      {svc.techStack.slice(0, 3).join(' · ')}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[#2563EB] dark:text-[#06B6D4] shrink-0">
-                      <span>Learn More</span>
-                      <ArrowRight
-                        className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </div>
-                </Link>
-              </StaggerItem>
-            );
-          })}
-        </StaggerGrid>
-
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 mb-8">
           <div
             className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)]"
             role="group"
             aria-label="Filter services by discipline"
           >
-            <button
-              type="button"
-              aria-pressed={selectedCategory === 'all'}
-              onClick={() => setSelectedCategory('all')}
-              className={`relative px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
-                selectedCategory === 'all'
-                  ? 'text-white'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              {selectedCategory === 'all' && (
-                <motion.span
-                  layoutId="service-filter-bg"
-                  transition={TRANSITION_MICRO}
-                  className="absolute inset-0 rounded-lg bg-[#2563EB]"
-                />
-              )}
-              <span className="relative z-10">All 14 Services</span>
-            </button>
-            {SERVICE_CATEGORIES.map((cat) => {
-              const active = selectedCategory === cat.id;
+            {filterButtons.map((btn) => {
+              const active = selectedFilter === btn.id;
               return (
                 <button
-                  key={cat.id}
+                  key={btn.id}
                   type="button"
                   aria-pressed={active}
-                  onClick={() => setSelectedCategory(cat.id)}
+                  onClick={() => setSelectedFilter(btn.id)}
                   className={`relative px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
                     active
                       ? 'text-white'
@@ -111,7 +76,7 @@ export function CoreServicesSection() {
                       className="absolute inset-0 rounded-lg bg-[#2563EB]"
                     />
                   )}
-                  <span className="relative z-10">{cat.label}</span>
+                  <span className="relative z-10">{btn.label}</span>
                 </button>
               );
             })}
@@ -119,17 +84,96 @@ export function CoreServicesSection() {
 
           <Link
             to="/services"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-[#2563EB] dark:text-[#06B6D4] whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-medium text-white bg-[#2563EB] hover:bg-[#1D4ED8] rounded-lg transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
           >
-            <span>Explore Full Services Directory</span>
+            <span>Explore All Services</span>
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredServices.map((service) => (
-            <ServiceCard key={service.slug} service={service} />
-          ))}
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          <AnimatePresence mode="popLayout">
+            {visibleServices.map((service, index) => (
+              <motion.div
+                layout
+                key={service.slug}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ ...TRANSITION_MICRO, delay: Math.min(index * 0.03, 0.18) }}
+                className="flex"
+              >
+                <ServiceCard service={service} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[var(--border-subtle)]">
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)]">
+            Showing {visibleServices.length} of {SERVICES_DATA.length} approved capabilities across Engineering, Intelligence, Digital, and Infrastructure.
+          </p>
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-[#2563EB] dark:text-[#06B6D4] border border-[var(--border-strong)] bg-[var(--bg-canvas)] hover:border-[#2563EB] rounded-lg transition-colors whitespace-nowrap"
+          >
+            <span>Explore All 14 Services Directory</span>
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+          </Link>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+export function CustomSolutionCTA() {
+  return (
+    <section className="py-16 sm:py-20 bg-[var(--bg-canvas)] border-t border-[var(--border-subtle)]">
+      <Container>
+        <div className="relative overflow-hidden rounded-2xl border border-[#2563EB]/35 bg-[#071426] p-8 sm:p-12 lg:p-14 text-white shadow-[var(--shadow-card)]">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#2563EB]/20 blur-3xl"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-[#06B6D4]/15 blur-3xl"
+          />
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8">
+              <p className="font-mono text-xs font-medium text-[#06B6D4] mb-3">
+                Custom Architecture &amp; Scoping
+              </p>
+              <TextMaskReveal>
+                <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
+                  Need Something Beyond Our Core Services?
+                </h2>
+              </TextMaskReveal>
+              <p className="mt-4 text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+                Every business has unique challenges. We design and engineer tailored technology solutions aligned with your requirements, operations and long-term goals.
+              </p>
+            </div>
+
+            <div className="lg:col-span-4 flex flex-wrap lg:flex-col lg:items-end gap-3">
+              <Link
+                to="/contact"
+                className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium text-white bg-[#2563EB] hover:bg-[#1D4ED8] rounded-lg transition-all whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06B6D4]"
+              >
+                <span>Discuss Your Requirements</span>
+                <ArrowRight
+                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
+              <Link
+                to="/start-a-project"
+                className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-[#06B6D4] border border-slate-700 bg-[#0F172A]/90 hover:border-[#06B6D4] hover:text-white rounded-lg transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06B6D4]"
+              >
+                Request a Custom Proposal
+              </Link>
+            </div>
+          </div>
         </div>
       </Container>
     </section>
@@ -140,18 +184,25 @@ export function ServicesAndProductsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.25 });
   const prefersReducedMotion = useReducedMotion();
+  const shouldAnimate = Boolean(isInView && !prefersReducedMotion);
 
   return (
-    <section ref={sectionRef} className="py-20 sm:py-24 bg-[#071426] text-[#F8FAFC]">
-      <Container>
+    <section ref={sectionRef} className="relative py-20 sm:py-24 bg-[#071426] text-[#F8FAFC] overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-15 bg-[radial-gradient(#06B6D4_1px,transparent_1px)] [background-size:24px_24px]"
+      />
+      <Container className="relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-5">
+          <RevealOnScroll direction="right" distance={16} className="lg:col-span-5">
             <p className="font-mono text-xs font-medium text-[#06B6D4] mb-3">
               Services &amp; Product Innovation
             </p>
-            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
-              Engineering Solutions. Creating Products.
-            </h2>
+            <TextMaskReveal>
+              <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
+                Engineering Solutions. Creating Products.
+              </h2>
+            </TextMaskReveal>
             <p className="mt-4 text-sm sm:text-base text-slate-300 leading-relaxed">
               Client engagements keep our engineering grounded in real operational constraints, while internal product research produces reusable SaaS foundations, mobile patterns, and guardrailed AI workflows that elevate client delivery.
             </p>
@@ -164,7 +215,7 @@ export function ServicesAndProductsSection() {
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
             </div>
-          </div>
+          </RevealOnScroll>
 
           <div className="lg:col-span-7 space-y-4">
             <svg viewBox="0 0 600 54" className="w-full h-auto hidden sm:block" aria-hidden="true">
@@ -174,12 +225,12 @@ export function ServicesAndProductsSection() {
                 stroke="#06B6D4"
                 strokeWidth="2"
                 strokeDasharray="5 5"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
+                variants={svgPathDrawVariants}
+                initial={prefersReducedMotion ? 'visible' : 'hidden'}
+                whileInView="visible"
                 viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.8, ease: MOTION_EASING }}
               />
-              {isInView && !prefersReducedMotion && (
+              {shouldAnimate && (
                 <motion.circle
                   r="4"
                   fill="#06B6D4"
@@ -239,84 +290,178 @@ export function ServicesAndProductsSection() {
   );
 }
 
-export function BusinessComparison() {
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const current = COMPARISON_ROWS[selectedIdx] ?? COMPARISON_ROWS[0];
+const TRANSFORMATION_CHALLENGES = [
+  'Limited digital presence',
+  'Repetitive manual processes',
+  'Disconnected business systems',
+  'Missed customer opportunities',
+  'Difficulty scaling operations',
+] as const;
+
+const TRANSFORMATION_SOLUTIONS = [
+  'High-performance websites and applications',
+  'Intelligent business automation',
+  'Integrated software and ERP solutions',
+  'Scalable cloud infrastructure',
+  'Data-driven digital strategies',
+] as const;
+
+export function BusinessTransformation() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 'some' });
+  const prefersReducedMotion = useReducedMotion();
+  const active = Boolean(isInView || prefersReducedMotion);
 
   return (
-    <section className="py-20 sm:py-24 bg-[var(--bg-canvas)] border-t border-[var(--border-subtle)]">
+    <section className="py-20 sm:py-24 bg-[var(--bg-canvas)] border-t border-[var(--border-subtle)] overflow-hidden">
       <Container>
         <SectionHeader
-          eyebrow="Strategic Comparison"
-          title="Fragmented technology workflows vs. integrated engineering."
-          description="Select a dimension to inspect how unified systems architecture reduces friction without making unsupported delivery guarantees."
+          eyebrow="Business Transformation"
+          title="From Business Challenges to Digital Opportunities."
+          description="Eliminate operational drag and disconnected tooling through an engineered transition from fragmented workflows to scalable platforms."
         />
 
-        <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div
-            className="lg:col-span-4 flex flex-row lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0"
-            role="tablist"
-            aria-label="Comparison dimensions"
+        <div
+          ref={sectionRef}
+          className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch"
+        >
+          {/* Left Side: Operational Challenges with progressive strike-through */}
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, x: -16 }}
+            animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
+            transition={{ duration: 0.5, ease: MOTION_EASING }}
+            className="lg:col-span-5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-7 sm:p-8 flex flex-col justify-between"
           >
-            {COMPARISON_ROWS.map((row, idx) => {
-              const active = idx === selectedIdx;
-              return (
-                <button
-                  key={row.dimension}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setSelectedIdx(idx)}
-                  className={`px-4 py-3 rounded-xl border text-left text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${
-                    active
-                      ? 'border-[#2563EB] bg-[var(--bg-surface)] text-[#2563EB] dark:text-[#06B6D4]'
-                      : 'border-[var(--border-subtle)] bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)]'
-                  }`}
-                >
-                  {row.dimension}
-                </button>
-              );
-            })}
-          </div>
+            <div>
+              <p className="font-mono text-xs text-[var(--text-muted)]">Operational Bottlenecks</p>
+              <h3 className="mt-2 font-display text-xl sm:text-2xl font-bold text-[var(--text-primary)]">
+                Is outdated technology holding your business back?
+              </h3>
 
-          <div className="lg:col-span-8" role="tabpanel">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={current.dimension}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={TRANSITION_MICRO}
-                className="grid grid-cols-1 md:grid-cols-2 gap-5"
+              <ul className="mt-6 space-y-4">
+                {TRANSFORMATION_CHALLENGES.map((challenge, idx) => (
+                  <motion.li
+                    key={challenge}
+                    initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}
+                    animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+                    transition={{
+                      duration: 0.35,
+                      delay: prefersReducedMotion ? 0 : 0.12 + idx * 0.08,
+                      ease: MOTION_EASING,
+                    }}
+                    className="flex items-center gap-3 py-1.5 border-b border-[var(--border-subtle)] last:border-b-0"
+                  >
+                    <XCircle
+                      className="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span className="relative inline-block text-sm sm:text-[15px] text-[var(--text-secondary)] font-medium">
+                      <span>{challenge}</span>
+                      <motion.span
+                        aria-hidden="true"
+                        initial={{ scaleX: prefersReducedMotion ? 1 : 0 }}
+                        animate={{ scaleX: active ? 1 : 0 }}
+                        transition={{
+                          duration: 0.42,
+                          delay: prefersReducedMotion ? 0 : 0.38 + idx * 0.1,
+                          ease: MOTION_EASING,
+                        }}
+                        style={{ originX: 0 }}
+                        className="absolute left-0 right-0 top-1/2 h-[1.5px] bg-[#2563EB]/65 dark:bg-[#06B6D4]/70 pointer-events-none"
+                      />
+                    </span>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+
+            <p className="mt-6 pt-4 border-t border-[var(--border-subtle)] text-xs text-[var(--text-muted)] leading-relaxed">
+              Resolving legacy bottlenecks starts with clean architecture, connected data contracts, and disciplined automation.
+            </p>
+          </motion.div>
+
+          {/* Right Side: Elevated Navy Transformation Panel */}
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }}
+            animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: 16 }}
+            transition={{ duration: 0.55, delay: prefersReducedMotion ? 0 : 0.25, ease: MOTION_EASING }}
+            className="lg:col-span-7 relative overflow-hidden rounded-2xl border border-[#2563EB]/50 bg-[#071426] p-7 sm:p-9 text-white shadow-[var(--shadow-card)] flex flex-col justify-between"
+          >
+            <motion.div
+              aria-hidden="true"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: active ? 0.8 : 0 }}
+              transition={{ duration: 0.9, delay: 0.3 }}
+              className="pointer-events-none absolute -top-28 -right-24 w-80 h-80 rounded-full bg-radial from-[#06B6D4]/25 via-[#2563EB]/15 to-transparent blur-2xl"
+            />
+
+            <div className="relative z-10">
+              <div className="flex items-center justify-between gap-2">
+                <p className="font-mono text-xs font-medium text-[#06B6D4]">
+                  Engineered Outcome Architecture
+                </p>
+                <span className="hidden sm:inline font-mono text-[11px] text-slate-400">
+                  Suvra Systems Model
+                </span>
+              </div>
+
+              <h3 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-white">
+                We Engineer Your Next Stage of Growth.
+              </h3>
+
+              <ul className="mt-6 space-y-3.5">
+                {TRANSFORMATION_SOLUTIONS.map((solution, idx) => (
+                  <motion.li
+                    key={solution}
+                    initial={prefersReducedMotion ? false : { opacity: 0, x: 10 }}
+                    animate={active ? { opacity: 1, x: 0 } : { opacity: 0, x: 10 }}
+                    transition={{
+                      duration: 0.38,
+                      delay: prefersReducedMotion ? 0 : 0.45 + idx * 0.08,
+                      ease: MOTION_EASING,
+                    }}
+                    className="flex items-center gap-3 rounded-lg border border-slate-800/90 bg-[#0F172A]/85 px-4 py-3"
+                  >
+                    <CheckCircle2
+                      className="w-4 h-4 text-[#06B6D4] shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span className="text-sm sm:text-[15px] font-medium text-slate-100">
+                      {solution}
+                    </span>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+
+            <motion.div
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+              animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{
+                duration: 0.4,
+                delay: prefersReducedMotion ? 0 : 0.82,
+                ease: MOTION_EASING,
+              }}
+              className="relative z-10 mt-8 pt-5 border-t border-slate-800 flex flex-wrap items-center gap-3"
+            >
+              <Link
+                to="/start-a-project"
+                className="group inline-flex items-center gap-2 px-5 py-3 text-sm font-medium text-white bg-[#2563EB] hover:bg-[#1D4ED8] rounded-lg transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06B6D4]"
               >
-                <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-[var(--text-muted)]">
-                    <XCircle className="w-4 h-4 text-slate-500" aria-hidden="true" />
-                    <span>Fragmented Approach</span>
-                  </div>
-                  <h3 className="mt-3 font-display text-lg font-semibold text-[var(--text-primary)]">
-                    {current.dimension}
-                  </h3>
-                  <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed">
-                    {current.fragmented}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-[#2563EB]/50 bg-[var(--bg-surface)] p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-[#2563EB] dark:text-[#06B6D4]">
-                    <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
-                    <span>Suvra Integrated Engineering</span>
-                  </div>
-                  <h3 className="mt-3 font-display text-lg font-semibold text-[var(--text-primary)]">
-                    {current.dimension}
-                  </h3>
-                  <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed">
-                    {current.integrated}
-                  </p>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                <span>Book a Strategy Call</span>
+                <ArrowRight
+                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
+              <Link
+                to="/services"
+                className="inline-flex items-center px-5 py-3 text-sm font-medium text-[#06B6D4] border border-slate-700 bg-[#0F172A] hover:border-[#06B6D4] hover:text-white rounded-lg transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06B6D4]"
+              >
+                Explore Our Solutions
+              </Link>
+            </motion.div>
+          </motion.div>
         </div>
       </Container>
     </section>

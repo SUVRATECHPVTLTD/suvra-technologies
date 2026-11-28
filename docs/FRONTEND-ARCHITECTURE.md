@@ -57,7 +57,7 @@ It separates **configuration**, **typed CMS fixtures**, **transport abstraction*
 
 ### 3.1 Code Splitting & Vendor Chunking
 - Every non-home page module in `src/App.tsx` is lazy-loaded with `React.lazy()` and `<Suspense fallback={<RouteFallback />} />`.
-- `vite.config.ts` configures `build.rolldownOptions.output.manualChunks` to separate `react-vendor`, `router-vendor`, `motion-vendor`, and `icons-vendor` from the application entry (`228.50 kB` unminified / `53.24 kB` gzipped), eliminating >500 kB chunk warnings and optimizing edge cache hit rates.
+- `vite.config.ts` configures `build.rolldownOptions.output.manualChunks` to separate `react-vendor`, `router-vendor`, `motion-vendor`, and `icons-vendor` from the application entry (`250.81 kB` unminified / `57.95 kB` gzipped), eliminating >500 kB chunk warnings and optimizing edge cache hit rates.
 
 ### 3.2 Anti-FOUC Dual-Theme Synchronization
 - An inline `<script>` in `index.html` resolves `localStorage.getItem('suvra-theme')` or `window.matchMedia('(prefers-color-scheme: dark)')` prior to first paint and applies/removes `.dark` on `<html>`.
@@ -65,6 +65,6 @@ It separates **configuration**, **typed CMS fixtures**, **transport abstraction*
 
 ### 3.3 Cloudflare Workers / Pages Compatibility
 - **Zero Node.js Runtime Dependencies in `src/`**: Verified zero imports of `fs`, `path`, `crypto`, `http`, `express`, `dotenv`, or `@google/genai` inside `src/`.
-- **Note on `package.json` Starter Dependencies**: `@google/genai`, `express`, `dotenv`, `tsx`, and `@types/express` remain in `package.json` from the initial workspace template; Vite tree-shakes/excludes them from `dist/`, so the production static bundle is 100% browser-only and Cloudflare-compatible.
+- **Clean `package.json` Dependencies**: Unused starter backend/AI packages (`@google/genai`, `express`, `dotenv`, `@types/express`) were removed from `package.json`, keeping the dependency graph focused on the static Cloudflare Pages/Workers frontend bundle (`tsx` remains available for TypeScript utility scripts and `scripts/verify-browser.mjs` supports headless Chromium verification).
 - **SPA Routing on Cloudflare Pages**: `public/_redirects` routes `/* /index.html 200` so direct visits and browser refreshes on nested routes (e.g., `/services/website-development`) render cleanly while unknown paths fall through to React Router's `<NotFoundPage />`.
 - **Cloudflare Workers Static Assets Note**: If deploying via Wrangler Workers Static Assets instead of Cloudflare Pages, set `"assets": { "directory": "./dist", "not_found_handling": "single-page-application" }` in `wrangler.jsonc`.

@@ -54,29 +54,16 @@
   }
 }
 
-@keyframes suvra-marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-suvra-marquee {
-  animation: suvra-marquee 38s linear infinite;
-}
-
-.animate-suvra-marquee:hover {
-  animation-play-state: paused;
+.bg-blueprint-grid {
+  background-image:
+    linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-  .animate-suvra-marquee {
-    animation: none;
   }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

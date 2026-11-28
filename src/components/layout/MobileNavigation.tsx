@@ -103,35 +103,43 @@ export function MobileNavigation({ open, onClose }: MobileNavigationProps) {
                 aria-hidden="true"
               />
             </button>
-            {expandedSection === 'services' && (
-              <div className="pl-3 pb-2 space-y-3">
-                <Link
-                  to="/services"
-                  onClick={onClose}
-                  className="block py-1.5 text-xs font-semibold text-[#2563EB] dark:text-[#06B6D4]"
+            <AnimatePresence initial={false}>
+              {expandedSection === 'services' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={TRANSITION_MICRO}
+                  className="pl-3 pb-2 space-y-3"
                 >
-                  All 14 Services Overview
-                </Link>
-                {SERVICE_CATEGORIES.map((cat) => (
-                  <div key={cat.id}>
-                    <p className="font-mono text-[11px] text-[var(--text-muted)] mb-1">{cat.label}</p>
-                    <ul className="space-y-1">
-                      {getServicesByCategory(cat.id).map((svc) => (
-                        <li key={svc.slug}>
-                          <Link
-                            to={`/services/${svc.slug}`}
-                            onClick={onClose}
-                            className="block py-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                          >
-                            {svc.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            )}
+                  <Link
+                    to="/services"
+                    onClick={onClose}
+                    className="block py-1.5 text-xs font-semibold text-[#2563EB] dark:text-[#06B6D4]"
+                  >
+                    All 14 Services Overview
+                  </Link>
+                  {SERVICE_CATEGORIES.map((cat) => (
+                    <div key={cat.id}>
+                      <p className="font-mono text-[11px] text-[var(--text-muted)] mb-1">{cat.label}</p>
+                      <ul className="space-y-1">
+                        {getServicesByCategory(cat.id).map((svc) => (
+                          <li key={svc.slug}>
+                            <Link
+                              to={`/services/${svc.slug}`}
+                              onClick={onClose}
+                              className="block py-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                            >
+                              {svc.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           <Link
@@ -169,26 +177,34 @@ export function MobileNavigation({ open, onClose }: MobileNavigationProps) {
                 aria-hidden="true"
               />
             </button>
-            {expandedSection === 'company' && (
-              <div className="pl-3 pb-2 space-y-1">
-                {[
-                  { label: 'About Us', to: '/about' },
-                  { label: 'Founder', to: '/founder' },
-                  { label: 'Team', to: '/team' },
-                  { label: 'Careers', to: '/careers' },
-                  { label: 'Service Locations', to: '/locations' },
-                ].map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    onClick={onClose}
-                    className="block py-2 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            )}
+            <AnimatePresence initial={false}>
+              {expandedSection === 'company' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={TRANSITION_MICRO}
+                  className="pl-3 pb-2 space-y-1"
+                >
+                  {[
+                    { label: 'About Us', to: '/about' },
+                    { label: 'Founder', to: '/founder' },
+                    { label: 'Team', to: '/team' },
+                    { label: 'Careers', to: '/careers' },
+                    { label: 'Service Locations', to: '/locations' },
+                  ].map((link) => (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      onClick={onClose}
+                      className="block py-2 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           <div className="border-t border-[var(--border-subtle)] pt-2">
@@ -204,24 +220,32 @@ export function MobileNavigation({ open, onClose }: MobileNavigationProps) {
                 aria-hidden="true"
               />
             </button>
-            {expandedSection === 'resources' && (
-              <div className="pl-3 pb-2 space-y-1">
-                {[
-                  { label: 'Technology Insights (Blog)', to: '/blog' },
-                  { label: 'Case Studies & Blueprints', to: '/case-studies' },
-                  { label: 'FAQ', to: '/faq' },
-                ].map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    onClick={onClose}
-                    className="block py-2 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            )}
+            <AnimatePresence initial={false}>
+              {expandedSection === 'resources' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={TRANSITION_MICRO}
+                  className="pl-3 pb-2 space-y-1"
+                >
+                  {[
+                    { label: 'Technology Insights (Blog)', to: '/blog' },
+                    { label: 'Case Studies & Blueprints', to: '/case-studies' },
+                    { label: 'FAQ', to: '/faq' },
+                  ].map((link) => (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      onClick={onClose}
+                      className="block py-2 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           <Link

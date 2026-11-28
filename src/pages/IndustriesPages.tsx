@@ -21,6 +21,7 @@ export function IndustriesIndexPage() {
         <Container>
           <Breadcrumbs items={[{ label: 'Industries' }]} />
           <SectionHeader
+            as="h1"
             align="left"
             eyebrow="Sector Expertise"
             title="Digital systems tailored to industry workflows."

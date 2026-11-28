@@ -33,6 +33,11 @@ export const TRANSITION_SECTION: Transition = {
   ease: MOTION_EASING,
 };
 
+export const TRANSITION_HERO: Transition = {
+  duration: MOTION_DURATIONS.hero,
+  ease: MOTION_EASING,
+};
+
 export const fadeRiseVariants: Variants = {
   hidden: { opacity: 0, y: 16 },
   visible: {
@@ -42,14 +47,81 @@ export const fadeRiseVariants: Variants = {
   },
 };
 
+/**
+ * Genuine clip-path + vertical rise mask reveal for typography and editorial headlines.
+ */
 export const maskRevealVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: {
+    opacity: 0,
+    y: 22,
+    clipPath: 'inset(0% 0% 100% 0%)',
+  },
   visible: {
     opacity: 1,
     y: 0,
+    clipPath: 'inset(0% 0% 0% 0%)',
+    transition: TRANSITION_HERO,
+  },
+};
+
+/**
+ * Editorial frame/media horizontal wipe reveal with restrained scale settling.
+ */
+export const editorialWipeVariants: Variants = {
+  hidden: {
+    opacity: 0.25,
+    scale: 1.03,
+    clipPath: 'inset(0% 100% 0% 0%)',
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    clipPath: 'inset(0% 0% 0% 0%)',
     transition: {
-      duration: MOTION_DURATIONS.hero,
+      duration: 0.65,
       ease: MOTION_EASING,
+    },
+  },
+};
+
+/**
+ * Directional axis reveal preset for asymmetric layouts and split columns.
+ */
+export function directionalRevealVariants(
+  direction: 'up' | 'down' | 'left' | 'right' = 'up',
+  distance = 20
+): Variants {
+  const axisOffset =
+    direction === 'up'
+      ? { y: distance, x: 0 }
+      : direction === 'down'
+        ? { y: -distance, x: 0 }
+        : direction === 'left'
+          ? { x: distance, y: 0 }
+          : { x: -distance, y: 0 };
+
+  return {
+    hidden: { opacity: 0, ...axisOffset },
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      transition: TRANSITION_SECTION,
+    },
+  };
+}
+
+/**
+ * Scroll/viewport-triggered SVG vector path drawing preset.
+ */
+export const svgPathDrawVariants: Variants = {
+  hidden: { pathLength: 0, opacity: 0.2 },
+  visible: {
+    pathLength: 1,
+    opacity: 1,
+    transition: {
+      pathLength: { duration: 0.85, ease: MOTION_EASING },
+      opacity: { duration: 0.25, ease: MOTION_EASING },
     },
   },
 };

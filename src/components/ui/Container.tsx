@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { TextMaskReveal } from './MotionPrimitives';
 
 interface ContainerProps {
   children: ReactNode;
@@ -14,6 +15,7 @@ interface SectionHeaderProps {
   title: string;
   description?: string;
   align?: 'left' | 'split';
+  as?: 'h1' | 'h2';
   className?: string;
 }
 
@@ -22,8 +24,15 @@ export function SectionHeader({
   title,
   description,
   align = 'split',
+  as = 'h2',
   className = '',
 }: SectionHeaderProps) {
+  const HeadingTag = as;
+  const headingClass =
+    as === 'h1'
+      ? 'font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight leading-[1.1] text-[var(--text-primary)]'
+      : 'font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[var(--text-primary)]';
+
   if (align === 'left') {
     return (
       <div className={`max-w-3xl ${className}`}>
@@ -32,9 +41,9 @@ export function SectionHeader({
             {eyebrow}
           </p>
         )}
-        <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
-          {title}
-        </h2>
+        <TextMaskReveal>
+          <HeadingTag className={headingClass}>{title}</HeadingTag>
+        </TextMaskReveal>
         {description && (
           <p className="mt-4 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
             {description}
@@ -52,9 +61,9 @@ export function SectionHeader({
             {eyebrow}
           </p>
         )}
-        <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
-          {title}
-        </h2>
+        <TextMaskReveal>
+          <HeadingTag className={headingClass}>{title}</HeadingTag>
+        </TextMaskReveal>
       </div>
       {description && (
         <div className="lg:col-span-5">

@@ -36,6 +36,7 @@ export function BlogIndexPage() {
         <Container>
           <Breadcrumbs items={[{ label: 'Insights' }]} />
           <SectionHeader
+            as="h1"
             align="left"
             eyebrow="Technology Insights"
             title="Engineering notes and systems thinking."
@@ -214,6 +215,7 @@ export function FaqPage() {
         <Container className="max-w-4xl">
           <Breadcrumbs items={[{ label: 'FAQ' }]} />
           <SectionHeader
+            as="h1"
             align="left"
             eyebrow="FAQ"
             title="Frequently asked questions."
@@ -241,6 +243,7 @@ export function ContactPage() {
           <Breadcrumbs items={[{ label: 'Contact' }]} />
 
           <SectionHeader
+            as="h1"
             align="left"
             eyebrow="Direct Channels"
             title="Connect with Suvra Technologies."
@@ -326,6 +329,7 @@ export function StartProjectPage() {
         <Container className="max-w-4xl">
           <Breadcrumbs items={[{ label: 'Start a Project' }]} />
           <SectionHeader
+            as="h1"
             align="left"
             eyebrow="Guided Intake"
             title="Start a Project with Suvra Technologies."

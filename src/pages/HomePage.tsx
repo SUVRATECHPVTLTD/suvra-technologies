@@ -17,8 +17,9 @@ import {
   HeroSection,
 } from '../components/home/HeroAndIntro';
 import {
-  BusinessComparison,
+  BusinessTransformation,
   CoreServicesSection,
+  CustomSolutionCTA,
   ServicesAndProductsSection,
 } from '../components/home/ServicesAndModel';
 import { SeoHead } from '../components/ui/SeoHead';
@@ -34,13 +35,14 @@ export function HomePage() {
       <CapabilityStrip />
       <CompanyIntroSection />
       <CoreServicesSection />
+      <CustomSolutionCTA />
       <ServicesAndProductsSection />
-      <BusinessComparison />
       <IndustriesPreview />
-      <TechnologyMarquee />
       <ProcessTimeline />
+      <TechnologyMarquee />
       <ProductsPreview />
       <PortfolioPreview />
+      <BusinessTransformation />
       <FounderSection />
       <BlogPreview />
       <FaqSection />

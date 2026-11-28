@@ -2,10 +2,81 @@ import type {
   BlogArticle,
   CareerRole,
   FAQItem,
+  FounderProfile,
   LocationCoverage,
   ProductDirection,
   ProjectConcept,
 } from '../types/cms';
+
+export const FOUNDER_EXECUTIVE_PROFILE: FounderProfile = {
+  name: 'Ravi Ranjan',
+  designation: 'Founder & Chief Executive Officer',
+  company: 'Suvra Technologies',
+  positioning: 'Technology & Innovation Company',
+  establishedYear: 2026,
+  headquarters: 'Ramdyalu, Muzaffarpur, Bihar, India — 842002',
+  linkedInUrl: 'https://www.linkedin.com/in/ravimeranjan/',
+  email: 'ofclsuvratech@gmail.com',
+  supportingHeadline: 'Building Technology with Purpose.',
+  supportingBiography:
+    'Ravi Ranjan is the Founder & CEO of Suvra Technologies, a Technology & Innovation Company focused on software engineering, intelligent automation, digital transformation and product innovation.',
+  suvrixaDisclosure:
+    'Ravi Ranjan is also the Founder of SUVRIXA, an independent local initiative helping students buy and sell second-hand books locally—kept completely distinct from Suvra Technologies’ commercial services and proprietary product roadmap.',
+  displayMode: 'editorial_typography',
+  optionalMedia: {
+    enabled: false,
+    imageUrl: null,
+  },
+};
+
+export const FOUNDER_LEADERSHIP_DATA = {
+  executiveIntroduction:
+    'Established in 2026 in Ramdyalu, Muzaffarpur, Bihar, Suvra Technologies was founded to bring disciplined software engineering, practical artificial intelligence, and transparent delivery governance to organizations across India and international markets.',
+  leadershipPhilosophy: [
+    {
+      title: 'Clarity Before Code',
+      detail:
+        'Scoping requirements, system boundaries, and commercial expectations honestly before writing production code—avoiding inflated estimates or vague promises.',
+    },
+    {
+      title: 'Root-Cause Engineering',
+      detail:
+        'Prioritizing clean TypeScript architecture, semantic accessibility, and long-term maintainability over quick visual patches that accumulate technical debt.',
+    },
+    {
+      title: 'Regionally Anchored, Globally Competitive',
+      detail:
+        'Operating from Muzaffarpur, Bihar with international engineering standards, edge-first performance, and disciplined unit economics.',
+    },
+  ],
+  companyVision:
+    'Our goal is to grow Suvra Technologies into a trusted, internationally competitive Technology & Innovation Company recognized for engineering rigor, verifiable digital craftsmanship, and dependable long-term client partnerships.',
+  technologyInnovationFocus: [
+    {
+      area: 'Modern Web, Mobile & Custom Software',
+      summary:
+        'Designing modular React, Next.js, mobile, and business software systems built around clean API contracts and future scalability.',
+    },
+    {
+      area: 'Applied AI & Business Automation',
+      summary:
+        'Implementing guardrailed automation workflows and deterministic knowledge assistants that reduce operational friction without fabricating outputs.',
+    },
+    {
+      area: 'Cloudflare-First Edge Infrastructure',
+      summary:
+        'Standardizing on Cloudflare Pages, Workers, D1, R2, Turnstile, and Zero Trust—paired selectively with Oracle Cloud Infrastructure where compute requirements justify it.',
+    },
+  ],
+  engineeringQualityCommitments: [
+    'Strict TypeScript domain models and isolated API client boundaries ready for backend growth.',
+    'Dual-theme light and dark design tokens verified for WCAG 2.2 AA contrast and keyboard navigation.',
+    'Honest public representation—never publishing fabricated case metrics, artificial rosters, or unapproved pricing figures.',
+    'Cost-conscious infrastructure decisions designed to keep baseline operational overhead predictable.',
+  ],
+  strategicDirection:
+    'Suvra Technologies is structured around a dual-track direction: delivering dependable custom engineering and digital transformation services for clients today, while steadily researching and architecting proprietary software utilities, mobile experiences, SaaS foundations, and AI-enabled tools for future product releases.',
+} as const;
 
 export const CAPABILITY_PILLARS = [
   'Software Engineering',

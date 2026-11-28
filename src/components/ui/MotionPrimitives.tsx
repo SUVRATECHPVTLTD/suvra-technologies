@@ -1,8 +1,11 @@
-import { motion } from 'motion/react';
-import type { ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
+import { motion, useInView, useReducedMotion } from 'motion/react';
 import {
-  MOTION_EASING,
   MOTION_DURATIONS,
+  MOTION_EASING,
+  directionalRevealVariants,
+  editorialWipeVariants,
+  maskRevealVariants,
   staggerContainerVariants,
   staggerItemVariants,
 } from '../../config/motion';
@@ -10,15 +13,27 @@ import {
 interface RevealOnScrollProps {
   children: ReactNode;
   delay?: number;
+  direction?: 'up' | 'down' | 'left' | 'right';
+  distance?: number;
   className?: string;
 }
 
-export function RevealOnScroll({ children, delay = 0, className = '' }: RevealOnScrollProps) {
+export function RevealOnScroll({
+  children,
+  delay = 0,
+  direction = 'up',
+  distance = 18,
+  className = '',
+}: RevealOnScrollProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const variants = directionalRevealVariants(direction, prefersReducedMotion ? 0 : distance);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.12 }}
+      variants={variants}
+      initial={prefersReducedMotion ? 'visible' : 'hidden'}
+      whileInView="visible"
+      viewport={{ once: true, amount: 'some' }}
       transition={{ duration: MOTION_DURATIONS.section, delay, ease: MOTION_EASING }}
       className={className}
     >
@@ -32,6 +47,7 @@ interface AnimatedHeadingProps {
   as?: 'h1' | 'h2' | 'h3';
   delay?: number;
   className?: string;
+  triggerOnScroll?: boolean;
 }
 
 export function AnimatedHeading({
@@ -39,17 +55,93 @@ export function AnimatedHeading({
   as = 'h1',
   delay = 0.06,
   className = '',
+  triggerOnScroll = false,
 }: AnimatedHeadingProps) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const isInView = useInView(wrapperRef, { once: true, amount: 'some' });
   const Component = motion[as];
+
+  if (prefersReducedMotion) {
+    const Plain = as;
+    return <Plain className={className}>{children}</Plain>;
+  }
+
   return (
-    <Component
-      initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: MOTION_DURATIONS.hero, delay, ease: MOTION_EASING }}
-      className={className}
-    >
-      {children}
-    </Component>
+    <div ref={wrapperRef} className="overflow-hidden pb-1 -mb-1">
+      <Component
+        variants={maskRevealVariants}
+        initial="hidden"
+        animate={!triggerOnScroll || isInView ? 'visible' : 'hidden'}
+        transition={{ duration: MOTION_DURATIONS.hero, delay, ease: MOTION_EASING }}
+        className={className}
+      >
+        {children}
+      </Component>
+    </div>
+  );
+}
+
+export function TextMaskReveal({
+  children,
+  delay = 0,
+  className = '',
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const isInView = useInView(wrapperRef, { once: true, amount: 'some' });
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
+  return (
+    <div ref={wrapperRef} className="overflow-hidden pb-1 -mb-1">
+      <motion.div
+        variants={maskRevealVariants}
+        initial="hidden"
+        animate={isInView ? 'visible' : 'hidden'}
+        transition={{ duration: MOTION_DURATIONS.section, delay, ease: MOTION_EASING }}
+        className={className}
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+}
+
+export function EditorialFrame({
+  children,
+  delay = 0,
+  className = '',
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const isInView = useInView(wrapperRef, { once: true, amount: 'some' });
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
+  return (
+    <div ref={wrapperRef} className={className}>
+      <motion.div
+        variants={editorialWipeVariants}
+        initial="hidden"
+        animate={isInView ? 'visible' : 'hidden'}
+        transition={{ duration: 0.65, delay, ease: MOTION_EASING }}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 }
 
@@ -60,12 +152,16 @@ export function StaggerGrid({
   children: ReactNode;
   className?: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const isInView = useInView(ref, { once: true, amount: 'some' });
+
   return (
     <motion.div
+      ref={ref}
       variants={staggerContainerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
+      initial={prefersReducedMotion ? 'visible' : 'hidden'}
+      animate={prefersReducedMotion || isInView ? 'visible' : 'hidden'}
       className={className}
     >
       {children}
