@@ -14,7 +14,7 @@ interface MobileNavigationProps {
 }
 
 export function MobileNavigation({ open, onClose }: MobileNavigationProps) {
-  const [expandedSection, setExpandedSection] = useState<'services' | 'company' | 'resources' | null>('services');
+  const [expandedSection, setExpandedSection] = useState<'services' | 'company' | 'resources' | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
@@ -53,7 +53,7 @@ export function MobileNavigation({ open, onClose }: MobileNavigationProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={TRANSITION_MICRO}
-          className="fixed inset-0 z-50 lg:hidden flex justify-end bg-[#071426]/60 backdrop-blur-xs"
+          className="fixed inset-0 z-50 xl:hidden flex justify-end bg-[#071426]/60 backdrop-blur-xs"
           role="dialog"
           aria-modal="true"
           aria-label="Mobile Navigation"
@@ -150,18 +150,18 @@ export function MobileNavigation({ open, onClose }: MobileNavigationProps) {
             Industries
           </Link>
           <Link
-            to="/products"
-            onClick={onClose}
-            className="flex items-center min-h-[44px] px-2 text-sm font-medium text-[var(--text-primary)] rounded-lg hover:bg-[var(--bg-elevated)]"
-          >
-            Products
-          </Link>
-          <Link
             to="/portfolio"
             onClick={onClose}
             className="flex items-center min-h-[44px] px-2 text-sm font-medium text-[var(--text-primary)] rounded-lg hover:bg-[var(--bg-elevated)]"
           >
             Portfolio
+          </Link>
+          <Link
+            to="/products"
+            onClick={onClose}
+            className="flex items-center min-h-[44px] px-2 text-sm font-medium text-[var(--text-primary)] rounded-lg hover:bg-[var(--bg-elevated)]"
+          >
+            Products
           </Link>
 
           <div className="border-t border-[var(--border-subtle)] pt-2">

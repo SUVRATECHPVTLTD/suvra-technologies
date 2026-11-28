@@ -7,7 +7,7 @@ interface SuggestedQuestionsProps {
 
 export function SuggestedQuestions({ onSelect, disabled = false }: SuggestedQuestionsProps) {
   return (
-    <div className="space-y-2 pt-1">
+    <div className="space-y-2 pt-1 pb-1.5">
       <p className="text-[11px] font-medium text-[var(--text-muted)]">
         Quick questions (English, Hindi &amp; Hinglish supported)
       </p>

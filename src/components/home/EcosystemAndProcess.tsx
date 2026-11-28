@@ -5,6 +5,8 @@ import {
   Compass,
   Layers,
   Map as MapIcon,
+  Pause,
+  Play,
   RefreshCw,
   Rocket,
   ShieldCheck,
@@ -34,8 +36,8 @@ import { getServiceBySlug } from '../../data/services';
 import { Container, SectionHeader } from '../ui/Container';
 
 const ECOSYSTEM_CENTER = 250;
-const ECOSYSTEM_RADIUS = 152;
-const LABEL_RADIUS = 198;
+const ECOSYSTEM_RADIUS = 150;
+const LABEL_RADIUS = 196;
 
 const INDUSTRY_SHORT_LABELS: Record<string, string> = {
   'education-edtech': 'EdTech',
@@ -63,8 +65,6 @@ const RADIAL_INDUSTRY_NODES = INDUSTRIES_DATA.map((industry, index) => {
   const ctrlR = ECOSYSTEM_RADIUS * 0.52;
   const ctrlX = Math.round(ECOSYSTEM_CENTER + ctrlR * Math.cos(ctrlAngle));
   const ctrlY = Math.round(ECOSYSTEM_CENTER + ctrlR * Math.sin(ctrlAngle));
-  const midX = Math.round(0.25 * ECOSYSTEM_CENTER + 0.5 * ctrlX + 0.25 * cx);
-  const midY = Math.round(0.25 * ECOSYSTEM_CENTER + 0.5 * ctrlY + 0.25 * cy);
 
   const lx = Math.round(ECOSYSTEM_CENTER + LABEL_RADIUS * cos);
   const ly = Math.round(ECOSYSTEM_CENTER + LABEL_RADIUS * sin);
@@ -81,8 +81,6 @@ const RADIAL_INDUSTRY_NODES = INDUSTRIES_DATA.map((industry, index) => {
     ly: Math.abs(cos) < 0.22 ? (sin < 0 ? ly - 6 : ly + 10) : ly + 3,
     textAnchor,
     path: `M ${ECOSYSTEM_CENTER} ${ECOSYSTEM_CENTER} Q ${ctrlX} ${ctrlY} ${cx} ${cy}`,
-    pulseX: [ECOSYSTEM_CENTER, midX, cx] as const,
-    pulseY: [ECOSYSTEM_CENTER, midY, cy] as const,
   };
 });
 
@@ -100,9 +98,9 @@ export function IndustriesPreview() {
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
   return (
-    <section className="py-20 sm:py-24 bg-[var(--bg-surface)] border-t border-[var(--border-subtle)]">
+    <section className="py-14 sm:py-16 bg-[var(--bg-surface)] border-t border-[var(--border-subtle)]">
       <Container>
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
+        <div className="flex flex-wrap items-end justify-between gap-6 mb-8">
           <SectionHeader
             align="left"
             eyebrow="Connected Industry Ecosystem"
@@ -118,10 +116,10 @@ export function IndustriesPreview() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-stretch">
           <div
             ref={ecosystemRef}
-            className="relative lg:col-span-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-4 sm:p-6 flex flex-col justify-between overflow-hidden"
+            className="relative lg:col-span-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-4 sm:p-5 flex flex-col justify-between overflow-hidden"
           >
             <div
               aria-hidden="true"
@@ -137,10 +135,11 @@ export function IndustriesPreview() {
               </span>
             </div>
 
-            <div className="relative z-10 my-3">
+            {/* Orbital radial network shown on md+ tablets/desktops; clean 2-col selector used on compact mobile */}
+            <div className="relative z-10 my-2.5 hidden md:block">
               <svg
                 viewBox="0 0 500 500"
-                className="w-full h-auto max-h-[410px] mx-auto"
+                className="w-full h-auto max-h-[365px] mx-auto"
                 role="img"
                 aria-label="Interactive circular ecosystem connecting Suvra Technologies to 10 core industries"
               >
@@ -153,7 +152,6 @@ export function IndustriesPreview() {
 
                 <circle cx={ECOSYSTEM_CENTER} cy={ECOSYSTEM_CENTER} r={190} fill="url(#industry-hub-glow)" />
 
-                {/* Outer & Orbital Geometry Rings */}
                 <circle
                   cx={ECOSYSTEM_CENTER}
                   cy={ECOSYSTEM_CENTER}
@@ -162,7 +160,7 @@ export function IndustriesPreview() {
                   className="stroke-[var(--border-subtle)]"
                   strokeWidth="1"
                 />
-                <motion.circle
+                <circle
                   cx={ECOSYSTEM_CENTER}
                   cy={ECOSYSTEM_CENTER}
                   r={182}
@@ -171,9 +169,8 @@ export function IndustriesPreview() {
                   strokeOpacity="0.32"
                   strokeDasharray="18 14 4 14"
                   strokeWidth="1.25"
-                  style={{ originX: `${ECOSYSTEM_CENTER}px`, originY: `${ECOSYSTEM_CENTER}px` }}
-                  animate={shouldAnimate ? { rotate: 360 } : undefined}
-                  transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+                  className="suvra-orbit-slow"
+                  data-paused={!shouldAnimate ? 'true' : undefined}
                 />
                 <circle
                   cx={ECOSYSTEM_CENTER}
@@ -193,7 +190,6 @@ export function IndustriesPreview() {
                   strokeWidth="1"
                 />
 
-                {/* Curved Sector Connectors */}
                 {RADIAL_INDUSTRY_NODES.map((node, idx) => {
                   const selected = node.slug === activeNode.slug;
                   return (
@@ -203,51 +199,36 @@ export function IndustriesPreview() {
                       fill="none"
                       className={
                         selected
-                          ? 'stroke-[#2563EB] dark:stroke-[#06B6D4]'
+                          ? 'stroke-[#2563EB] dark:stroke-[#06B6D4] suvra-dash-flow'
                           : 'stroke-[var(--border-strong)]/55'
                       }
+                      data-paused={!shouldAnimate ? 'true' : undefined}
                       strokeWidth={selected ? 2.4 : 1.1}
-                      strokeDasharray={selected ? undefined : '3 5'}
+                      strokeDasharray={selected ? '6 6' : '3 5'}
                       variants={svgPathDrawVariants}
                       initial={prefersReducedMotion ? 'visible' : 'hidden'}
                       whileInView="visible"
                       viewport={{ once: true, amount: 0.2 }}
-                      transition={{ duration: 0.6, delay: idx * 0.03, ease: MOTION_EASING }}
+                      transition={{ duration: 0.55, delay: idx * 0.025, ease: MOTION_EASING }}
                     />
                   );
                 })}
 
-                {/* Active Bezier Pulse & Halo */}
                 {shouldAnimate && (
-                  <>
-                    <motion.circle
-                      key={`sector-ring-${activeNode.slug}`}
-                      cx={activeNode.cx}
-                      cy={activeNode.cy}
-                      r={27}
-                      fill="none"
-                      stroke="#06B6D4"
-                      strokeWidth="1.5"
-                      initial={{ scale: 0.85, opacity: 0.7 }}
-                      animate={{ scale: 1.32, opacity: 0 }}
-                      transition={{ duration: 2.1, repeat: Infinity, ease: 'easeOut' }}
-                    />
-                    <motion.circle
-                      key={`sector-pulse-${activeNode.slug}`}
-                      r={4}
-                      fill="#06B6D4"
-                      initial={{ cx: ECOSYSTEM_CENTER, cy: ECOSYSTEM_CENTER, opacity: 0 }}
-                      animate={{
-                        cx: [...activeNode.pulseX],
-                        cy: [...activeNode.pulseY],
-                        opacity: [0, 1, 0],
-                      }}
-                      transition={{ duration: 1.75, repeat: Infinity, ease: 'easeInOut' }}
-                    />
-                  </>
+                  <motion.circle
+                    key={`sector-ring-${activeNode.slug}`}
+                    cx={activeNode.cx}
+                    cy={activeNode.cy}
+                    r={27}
+                    fill="none"
+                    stroke="#06B6D4"
+                    strokeWidth="1.5"
+                    initial={{ scale: 0.85, opacity: 0.65 }}
+                    animate={{ scale: 1.32, opacity: 0 }}
+                    transition={{ duration: 2.1, repeat: Infinity, ease: 'easeOut' }}
+                  />
                 )}
 
-                {/* Central Suvra Core */}
                 <g>
                   <circle
                     cx={ECOSYSTEM_CENTER}
@@ -288,7 +269,6 @@ export function IndustriesPreview() {
                   </text>
                 </g>
 
-                {/* 10 Sector Nodes with Clean Outer Labels */}
                 {RADIAL_INDUSTRY_NODES.map((node) => {
                   const selected = node.slug === activeNode.slug;
                   return (
@@ -352,7 +332,7 @@ export function IndustriesPreview() {
             </div>
 
             <div
-              className="relative z-10 grid grid-cols-2 sm:grid-cols-5 gap-1.5 pt-3 border-t border-[var(--border-subtle)]"
+              className="relative z-10 mt-3 md:mt-0 grid grid-cols-2 sm:grid-cols-5 gap-1.5 pt-2 md:pt-3 md:border-t md:border-[var(--border-subtle)]"
               role="tablist"
               aria-label="Industries selector"
             >
@@ -382,7 +362,7 @@ export function IndustriesPreview() {
           <div
             role="tabpanel"
             aria-label={activeNode.name}
-            className="lg:col-span-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-6 sm:p-8 flex flex-col justify-between"
+            className="lg:col-span-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-6 sm:p-7 flex flex-col justify-between"
           >
             <AnimatePresence mode="wait">
               <motion.div
@@ -409,12 +389,12 @@ export function IndustriesPreview() {
                     {activeNode.sectorContext}
                   </p>
 
-                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 border-t border-[var(--border-subtle)]">
+                  <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-5 pt-5 border-t border-[var(--border-subtle)]">
                     <div>
-                      <h4 className="text-xs font-semibold text-[var(--text-primary)] mb-2.5">
+                      <h4 className="text-xs font-semibold text-[var(--text-primary)] mb-2">
                         Common Sector Challenges
                       </h4>
-                      <ul className="space-y-2.5 text-xs sm:text-sm text-[var(--text-secondary)]">
+                      <ul className="space-y-2 text-xs sm:text-sm text-[var(--text-secondary)]">
                         {activeNode.challenges.slice(0, 2).map((ch) => (
                           <li key={ch} className="flex items-baseline gap-2">
                             <span className="font-mono text-[var(--text-muted)]" aria-hidden="true">
@@ -426,10 +406,10 @@ export function IndustriesPreview() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="text-xs font-semibold text-[var(--text-primary)] mb-2.5">
+                      <h4 className="text-xs font-semibold text-[var(--text-primary)] mb-2">
                         Engineering Solutions
                       </h4>
-                      <ul className="space-y-2.5 text-xs sm:text-sm text-[var(--text-secondary)]">
+                      <ul className="space-y-2 text-xs sm:text-sm text-[var(--text-secondary)]">
                         {activeNode.solutions.slice(0, 2).map((sol) => (
                           <li key={sol} className="flex items-baseline gap-2">
                             <span
@@ -446,8 +426,8 @@ export function IndustriesPreview() {
                   </div>
 
                   {recommendedServices.length > 0 && (
-                    <div className="mt-6 pt-5 border-t border-[var(--border-subtle)]">
-                      <p className="font-mono text-[11px] text-[var(--text-muted)] mb-2.5">
+                    <div className="mt-5 pt-4 border-t border-[var(--border-subtle)]">
+                      <p className="font-mono text-[11px] text-[var(--text-muted)] mb-2">
                         Recommended Service Tracks
                       </p>
                       <div className="flex flex-wrap gap-x-5 gap-y-2">
@@ -466,7 +446,7 @@ export function IndustriesPreview() {
                   )}
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-4">
+                <div className="mt-5 pt-4 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-4">
                   <span className="text-xs text-[var(--text-muted)] max-w-sm">
                     Governance: {activeNode.complianceFocus}
                   </span>
@@ -487,9 +467,6 @@ export function IndustriesPreview() {
   );
 }
 
-/**
- * Clean inline SVG vector marks representing standard engineering platforms in our delivery stack.
- */
 function TechPlatformMark({ name }: { name: string }) {
   const lower = name.toLowerCase();
 
@@ -588,6 +565,10 @@ const TECH_FILTERS: Array<'All' | TechEcosystemCategory> = [
 
 export function TechnologyMarquee() {
   const [techFilter, setTechFilter] = useState<'All' | TechEcosystemCategory>('All');
+  const [marqueePaused, setMarqueePaused] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isSectionInView = useInView(sectionRef, { amount: 0.1 });
+  const prefersReducedMotion = useReducedMotion();
 
   const visibleTech =
     techFilter === 'All'
@@ -599,17 +580,109 @@ export function TechnologyMarquee() {
       ? TECHNOLOGY_ECOSYSTEM.length
       : TECHNOLOGY_ECOSYSTEM.filter((item) => item.category === category).length;
 
-  return (
-    <section className="py-20 sm:py-24 bg-[var(--bg-canvas)] border-t border-[var(--border-subtle)]">
-      <Container>
-        <SectionHeader
-          eyebrow="Technology Ecosystem"
-          title="Modern platforms aligned with our Cloudflare-first engineering stack."
-          description="Filter our technical stack by architectural layer. These represent platforms used or planned in engineering delivery—never implied as corporate partnerships."
-        />
+  const gridColsClass =
+    visibleTech.length === 2
+      ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2'
+      : visibleTech.length === 3
+        ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4';
 
+  const hasSingleTailOnLg = visibleTech.length > 4 && visibleTech.length % 4 === 1;
+  const hasSingleTailOnSm = visibleTech.length > 2 && visibleTech.length % 2 === 1;
+
+  return (
+    <section
+      ref={sectionRef}
+      className="py-14 sm:py-16 bg-[var(--bg-canvas)] border-t border-[var(--border-subtle)] overflow-hidden"
+    >
+      <Container>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <SectionHeader
+            align="left"
+            eyebrow="Technology Ecosystem"
+            title="Modern platforms aligned with our Cloudflare-first engineering stack."
+            description="Continuous stack strip and filterable architecture directory. Listed platforms represent tools used or targeted in delivery—never implied as corporate partnerships."
+          />
+
+          {!prefersReducedMotion && (
+            <button
+              type="button"
+              onClick={() => setMarqueePaused((prev) => !prev)}
+              aria-pressed={marqueePaused}
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-mono font-medium rounded-lg border border-[var(--border-strong)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[#2563EB] transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
+            >
+              {marqueePaused ? (
+                <>
+                  <Play className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#06B6D4]" aria-hidden="true" />
+                  <span>Resume Strip</span>
+                </>
+              ) : (
+                <>
+                  <Pause className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#06B6D4]" aria-hidden="true" />
+                  <span>Pause Strip</span>
+                </>
+              )}
+            </button>
+          )}
+        </div>
+      </Container>
+
+      {/* Genuine GPU-composited horizontal marquee (falls back to static wrapped row on reduced motion) */}
+      <div className="mt-7 border-t border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] py-3.5">
+        {prefersReducedMotion ? (
+          <Container>
+            <div className="flex flex-wrap items-center gap-3">
+              {TECHNOLOGY_ECOSYSTEM.map((item) => (
+                <div
+                  key={`rm-${item.name}`}
+                  className="inline-flex items-center gap-2.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-canvas)] px-3.5 py-2"
+                >
+                  <TechPlatformMark name={item.name} />
+                  <span className="text-xs font-semibold text-[var(--text-primary)]">
+                    {item.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Container>
+        ) : (
+          <div className="suvra-marquee-container overflow-hidden">
+            <div
+              className="suvra-marquee-track flex items-center gap-4 pr-4"
+              data-paused={marqueePaused || !isSectionInView ? 'true' : undefined}
+            >
+              {[0, 1].map((cloneIdx) => (
+                <div
+                  key={`track-${cloneIdx}`}
+                  aria-hidden={cloneIdx === 1 ? 'true' : undefined}
+                  className="flex items-center gap-4 shrink-0"
+                >
+                  {TECHNOLOGY_ECOSYSTEM.map((item) => (
+                    <div
+                      key={`${cloneIdx}-${item.name}`}
+                      className="inline-flex items-center gap-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-canvas)] px-4 py-2.5 shrink-0"
+                    >
+                      <TechPlatformMark name={item.name} />
+                      <div>
+                        <p className="font-display text-xs font-semibold text-[var(--text-primary)] whitespace-nowrap">
+                          {item.name}
+                        </p>
+                        <p className="font-mono text-[10px] text-[var(--text-muted)] whitespace-nowrap">
+                          {item.role}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <Container>
         <div
-          className="mt-8 inline-flex flex-wrap items-center gap-1.5 p-1 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]"
+          className="mt-7 inline-flex flex-wrap items-center gap-1.5 p-1 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]"
           role="group"
           aria-label="Filter technology ecosystem by category"
         >
@@ -649,41 +722,73 @@ export function TechnologyMarquee() {
           })}
         </div>
 
-        <motion.div
-          layout
-          className="mt-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
-        >
-          <AnimatePresence mode="popLayout">
-            {visibleTech.map((item) => (
-              <motion.div
-                layout
-                key={item.name}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={TRANSITION_MICRO}
-                className="group rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:border-[#2563EB]/50 dark:hover:border-[#06B6D4]/50 hover:shadow-[var(--shadow-card)]"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="w-9 h-9 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] flex items-center justify-center">
-                      <TechPlatformMark name={item.name} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={techFilter}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={prefersReducedMotion ? undefined : { opacity: 0, y: -6 }}
+            transition={{ duration: 0.18, ease: MOTION_EASING }}
+            className={`mt-6 grid ${gridColsClass} gap-3.5`}
+          >
+            {visibleTech.map((item, idx) => {
+              const isLast = idx === visibleTech.length - 1;
+              const isOrphanTail = isLast && (hasSingleTailOnLg || hasSingleTailOnSm);
+
+              if (isOrphanTail) {
+                return (
+                  <div
+                    key={item.name}
+                    className={`${hasSingleTailOnSm ? 'sm:col-span-2' : ''} ${
+                      hasSingleTailOnLg ? 'lg:col-span-4' : 'lg:col-span-1'
+                    } rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors hover:border-[#2563EB]/50 dark:hover:border-[#06B6D4]/50`}
+                  >
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-9 h-9 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] flex items-center justify-center shrink-0">
+                        <TechPlatformMark name={item.name} />
+                      </div>
+                      <div>
+                        <h3 className="font-display text-sm sm:text-base font-semibold text-[var(--text-primary)]">
+                          {item.name}
+                        </h3>
+                        <p className="font-mono text-xs text-[var(--text-muted)]">
+                          {item.role} · Secondary Backup &amp; Dedicated Compute Layer
+                        </p>
+                      </div>
                     </div>
                     <span className="font-mono text-[11px] text-[#2563EB] dark:text-[#06B6D4]">
                       {item.category}
                     </span>
                   </div>
-                  <h3 className="mt-4 font-display text-base font-semibold text-[var(--text-primary)]">
-                    {item.name}
-                  </h3>
-                </div>
-                <p className="mt-1.5 font-mono text-xs text-[var(--text-muted)]">{item.role}</p>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+                );
+              }
 
-        <p className="mt-6 text-xs text-[var(--text-muted)]">
+              return (
+                <div
+                  key={item.name}
+                  className="group rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:border-[#2563EB]/50 dark:hover:border-[#06B6D4]/50 hover:shadow-[var(--shadow-card)]"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="w-8 h-8 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] flex items-center justify-center">
+                        <TechPlatformMark name={item.name} />
+                      </div>
+                      <span className="font-mono text-[11px] text-[#2563EB] dark:text-[#06B6D4]">
+                        {item.category}
+                      </span>
+                    </div>
+                    <h3 className="mt-3.5 font-display text-base font-semibold text-[var(--text-primary)]">
+                      {item.name}
+                    </h3>
+                  </div>
+                  <p className="mt-1 font-mono text-xs text-[var(--text-muted)]">{item.role}</p>
+                </div>
+              );
+            })}
+          </motion.div>
+        </AnimatePresence>
+
+        <p className="mt-5 text-xs text-[var(--text-muted)]">
           Disclosure: Listed technologies reflect engineering tools and target deployment platforms used in our development architecture, not official partner certifications.
         </p>
       </Container>
@@ -711,7 +816,7 @@ export function ProcessTimeline() {
 
   const { scrollYProgress } = useScroll({
     target: timelineContainerRef,
-    offset: ['start 0.75', 'end 0.6'],
+    offset: ['start 0.78', 'end 0.58'],
   });
   const smoothScaleY = useSpring(scrollYProgress, {
     stiffness: 150,
@@ -731,14 +836,14 @@ export function ProcessTimeline() {
   }, [scrollYProgress]);
 
   return (
-    <section className="py-20 sm:py-24 bg-[var(--bg-surface)] border-t border-[var(--border-subtle)]">
+    <section className="py-14 sm:py-16 bg-[var(--bg-surface)] border-t border-[var(--border-subtle)]">
       <Container>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeader
             align="left"
             eyebrow="Our Development Process"
             title="Seven disciplined phases from discovery to ongoing improvement."
-            description="Switch between our Website & Digital Delivery and Software & Product Engineering tracks as you scroll down our execution pipeline."
+            description="Switch between our Website & Digital Delivery and Software & Product Engineering tracks across our execution pipeline."
           />
 
           <div
@@ -778,31 +883,28 @@ export function ProcessTimeline() {
           </div>
         </div>
 
-        {/* Scroll-driven alternating vertical timeline */}
-        <div ref={timelineContainerRef} className="relative mt-14">
-          {/* Desktop center spine */}
+        <div ref={timelineContainerRef} className="relative mt-9">
           <div
             aria-hidden="true"
-            className="hidden md:block absolute left-1/2 top-5 bottom-5 w-0.5 -translate-x-1/2 bg-[var(--border-subtle)]"
+            className="hidden md:block absolute left-1/2 top-4 bottom-4 w-0.5 -translate-x-1/2 bg-[var(--border-subtle)]"
           />
           <motion.div
             aria-hidden="true"
             style={{ scaleY: prefersReducedMotion ? 1 : smoothScaleY }}
-            className="hidden md:block absolute left-1/2 top-5 bottom-5 w-0.5 -translate-x-1/2 origin-top bg-gradient-to-b from-[#2563EB] to-[#06B6D4]"
+            className="hidden md:block absolute left-1/2 top-4 bottom-4 w-0.5 -translate-x-1/2 origin-top bg-gradient-to-b from-[#2563EB] to-[#06B6D4]"
           />
 
-          {/* Mobile left spine */}
           <div
             aria-hidden="true"
-            className="md:hidden absolute left-5 top-4 bottom-4 w-0.5 bg-[var(--border-subtle)]"
+            className="md:hidden absolute left-4 top-4 bottom-4 w-0.5 bg-[var(--border-subtle)]"
           />
           <motion.div
             aria-hidden="true"
             style={{ scaleY: prefersReducedMotion ? 1 : smoothScaleY }}
-            className="md:hidden absolute left-5 top-4 bottom-4 w-0.5 origin-top bg-gradient-to-b from-[#2563EB] to-[#06B6D4]"
+            className="md:hidden absolute left-4 top-4 bottom-4 w-0.5 origin-top bg-gradient-to-b from-[#2563EB] to-[#06B6D4]"
           />
 
-          <ol className="space-y-8 md:space-y-12">
+          <ol className="space-y-4 md:space-y-5">
             {DEVELOPMENT_PROCESS.map((phase, idx) => {
               const isLeft = idx % 2 === 0;
               const isSelected = activeIndex === idx;
@@ -814,15 +916,14 @@ export function ProcessTimeline() {
               return (
                 <li
                   key={phase.step}
-                  className="relative grid grid-cols-1 md:grid-cols-[1fr_68px_1fr] items-start gap-4 md:gap-0 pl-14 md:pl-0"
+                  className="relative grid grid-cols-1 md:grid-cols-[1fr_56px_1fr] items-start gap-3 md:gap-0 pl-12 md:pl-0"
                 >
-                  {/* Milestone Icon Marker */}
-                  <div className="md:col-start-2 md:row-start-1 flex justify-center md:pt-5">
+                  <div className="md:col-start-2 md:row-start-1 flex justify-center md:pt-4">
                     <button
                       type="button"
                       onClick={() => setActiveIndex(idx)}
                       aria-label={`Phase ${phase.step}: ${phase.title}`}
-                      className={`absolute left-0 top-4 md:static w-10 h-10 md:w-11 md:h-11 rounded-full border-2 flex items-center justify-center transition-all duration-200 z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB] ${
+                      className={`absolute left-0 top-4 md:static w-9 h-9 md:w-10 md:h-10 rounded-full border-2 flex items-center justify-center transition-all duration-200 z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB] ${
                         isSelected
                           ? 'border-[#06B6D4] bg-[#2563EB] text-white scale-105 shadow-md'
                           : isCompleted
@@ -834,18 +935,17 @@ export function ProcessTimeline() {
                     </button>
                   </div>
 
-                  {/* Alternating Milestone Card */}
                   <motion.div
-                    initial={prefersReducedMotion ? false : { opacity: 0, x: isLeft ? -14 : 14 }}
+                    initial={prefersReducedMotion ? false : { opacity: 0.72, x: isLeft ? -10 : 10 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.25 }}
+                    viewport={{ once: true, amount: 0.15 }}
                     transition={TRANSITION_STANDARD}
                     onMouseEnter={() => setActiveIndex(idx)}
-                    className={`rounded-2xl border p-6 transition-all duration-200 ${
+                    className={`rounded-xl border p-4 sm:p-5 transition-all duration-200 ${
                       isSelected
                         ? 'border-[#2563EB]/65 dark:border-[#06B6D4]/65 bg-[var(--bg-canvas)] shadow-[var(--shadow-card)]'
                         : 'border-[var(--border-subtle)] bg-[var(--bg-canvas)] hover:border-[var(--border-strong)]'
-                    } ${isLeft ? 'md:col-start-1 md:row-start-1 md:mr-5' : 'md:col-start-3 md:row-start-1 md:ml-5'}`}
+                    } ${isLeft ? 'md:col-start-1 md:row-start-1 md:mr-4' : 'md:col-start-3 md:row-start-1 md:ml-4'}`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="font-mono text-xs tabular-nums text-[#2563EB] dark:text-[#06B6D4]">
@@ -855,20 +955,20 @@ export function ProcessTimeline() {
                         {track === 'website' ? 'Web & Digital' : 'Software & Product'}
                       </span>
                     </div>
-                    <h3 className="mt-2 font-display text-xl font-bold text-[var(--text-primary)]">
+                    <h3 className="mt-1.5 font-display text-lg font-bold text-[var(--text-primary)]">
                       {phase.title}
                     </h3>
-                    <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
+                    <p className="mt-1 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
                       {phase.summary}
                     </p>
                     <AnimatePresence mode="wait">
                       <motion.p
                         key={`${track}-${phase.step}`}
-                        initial={{ opacity: 0, y: 4 }}
+                        initial={{ opacity: 0, y: 3 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -4 }}
+                        exit={{ opacity: 0, y: -3 }}
                         transition={TRANSITION_MICRO}
-                        className="mt-4 pt-3 border-t border-[var(--border-subtle)] text-xs font-medium text-[var(--text-primary)]"
+                        className="mt-3 pt-2.5 border-t border-[var(--border-subtle)] text-xs font-medium text-[var(--text-primary)]"
                       >
                         <span className="font-mono text-[var(--text-muted)]">Key Output: </span>
                         {deliverable}

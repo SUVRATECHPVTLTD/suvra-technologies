@@ -38,9 +38,9 @@ It separates **configuration**, **typed CMS fixtures**, **transport abstraction*
 │   │   ├── ThemeContext.tsx    # Light/Dark state synced to <html>.dark and suvra-theme key
 │   │   └── ToastContext.tsx    # Accessible live-region toast notifications
 │   ├── components/
-│   │   ├── layout/             # Capsule Header, MegaMenu, MobileNavigation, Footer, Layout
-│   │   ├── home/               # HeroAndIntro, ServicesAndModel, EcosystemAndProcess, ProofAndConversion
-│   │   ├── cards/              # ServiceCard, IndustryCard, ProductCard, ProjectCard, BlogCard
+│   │   ├── layout/             # Capsule Header (xl desktop nav), MegaMenu, MobileNavigation (collapsed default), Footer, Layout
+│   │   ├── home/               # HeroAndIntro (Hero, CapabilityStrip, AboutOverviewSection), ServicesAndModel (CoreServices, 1-to-1 BusinessTransformation, CustomSolutionCTA), EcosystemAndProcess (IndustriesPreview, ProcessTimeline, CSS TechnologyMarquee), ProofAndConversion
+│   │   ├── cards/              # ServiceCard (lightweight INR footer), IndustryCard, ProductCard, ProjectCard (inline SVG schematics), BlogCard
 │   │   ├── forms/              # FormField, MultiStepEnquiryForm (INR-only budgets)
 │   │   └── ui/                 # BrandMark, Container, Breadcrumbs, ThemeToggle, FAQAccordion, ServiceDiagram, FloatingWhatsApp, SeoHead, FeedbackStates, MotionPrimitives, BackToTop, Toast
 │   └── pages/

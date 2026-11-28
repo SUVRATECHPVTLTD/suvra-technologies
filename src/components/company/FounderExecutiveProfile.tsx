@@ -22,7 +22,7 @@ export function FounderExecutiveProfile({ variant = 'home' }: FounderExecutivePr
   return (
     <div
       ref={containerRef}
-      className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-7 sm:p-10 lg:p-12 shadow-[var(--shadow-card)]"
+      className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-8 lg:p-10 shadow-[var(--shadow-card)]"
     >
       {/* Subtle geometric blueprint texture & restrained brand accents */}
       <div
@@ -43,7 +43,7 @@ export function FounderExecutiveProfile({ variant = 'home' }: FounderExecutivePr
           initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
           animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
           transition={{ duration: 0.42, ease: MOTION_EASING }}
-          className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[var(--border-subtle)]"
+          className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-[var(--border-subtle)]"
         >
           <p className="font-mono text-xs font-medium tracking-[0.16em] uppercase text-[#2563EB] dark:text-[#06B6D4]">
             FOUNDER &amp; LEADERSHIP
@@ -59,7 +59,7 @@ export function FounderExecutiveProfile({ variant = 'home' }: FounderExecutivePr
         </motion.div>
 
         {/* Main editorial grid: Typography identity + structured executive dossier */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           {/* Left 7 columns: Editorial Typography & Core Biography */}
           <div className="lg:col-span-7">
             <motion.div

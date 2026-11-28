@@ -92,16 +92,7 @@ export function Header() {
               <BrandMark compact={scrolled} />
             </Link>
 
-          <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-5 xl:gap-6">
-            <NavLink to="/" end className={navLinkClass}>
-              {({ isActive }) => (
-                <>
-                  <span>Home</span>
-                  {renderUnderline(isActive)}
-                </>
-              )}
-            </NavLink>
-
+          <nav aria-label="Primary navigation" className="hidden xl:flex items-center gap-6">
             <button
               type="button"
               onClick={() => setOpenMenu((prev) => (prev === 'services' ? null : 'services'))}
@@ -132,19 +123,19 @@ export function Header() {
               )}
             </NavLink>
 
-            <NavLink to="/products" className={navLinkClass}>
+            <NavLink to="/portfolio" className={navLinkClass}>
               {({ isActive }) => (
                 <>
-                  <span>Products</span>
+                  <span>Portfolio</span>
                   {renderUnderline(isActive)}
                 </>
               )}
             </NavLink>
 
-            <NavLink to="/portfolio" className={navLinkClass}>
+            <NavLink to="/products" className={navLinkClass}>
               {({ isActive }) => (
                 <>
-                  <span>Portfolio</span>
+                  <span>Products</span>
                   {renderUnderline(isActive)}
                 </>
               )}
@@ -287,7 +278,7 @@ export function Header() {
               onClick={() => setMobileOpen(true)}
               aria-label="Open navigation menu"
               aria-expanded={mobileOpen}
-              className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)]"
+              className="xl:hidden inline-flex items-center justify-center w-11 h-11 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
             >
               <Menu className="w-5 h-5" aria-hidden="true" />
             </button>

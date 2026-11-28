@@ -10,7 +10,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[var(--bg-surface)] border-t border-[var(--border-subtle)] pt-16 pb-24 sm:pb-16 lg:pb-12">
+    <footer className="bg-[var(--bg-surface)] border-t border-[var(--border-subtle)] pt-14 pb-28 sm:pb-20 lg:pb-14">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-[var(--border-subtle)]">
           <div className="lg:col-span-4 space-y-4">
@@ -109,11 +109,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[var(--text-muted)]">
+        <div className="pt-6 pr-14 sm:pr-20 lg:pr-24 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[var(--text-muted)]">
           <p>
             &copy; {year} {SITE_CONFIG.companyName} · Established {SITE_CONFIG.establishedYear}
           </p>
-          <div className="flex flex-wrap items-center gap-5">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <Link to="/privacy-policy" className="hover:text-[var(--text-primary)] transition-colors">
               Privacy Policy (Draft)
             </Link>

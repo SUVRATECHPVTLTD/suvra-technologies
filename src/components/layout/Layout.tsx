@@ -17,7 +17,7 @@ function FloatingControlStack() {
     <>
       <div
         aria-label="Quick communication and navigation tools"
-        className={`fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-30 flex flex-col items-end gap-3 pointer-events-none transition-opacity duration-150 ${
+        className={`fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-30 flex flex-col items-end gap-2 sm:gap-3 pointer-events-none transition-opacity duration-150 ${
           isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}

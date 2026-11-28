@@ -12,15 +12,14 @@ import {
   TechnologyMarquee,
 } from '../components/home/EcosystemAndProcess';
 import {
+  AboutOverviewSection,
   CapabilityStrip,
-  CompanyIntroSection,
   HeroSection,
 } from '../components/home/HeroAndIntro';
 import {
   BusinessTransformation,
   CoreServicesSection,
   CustomSolutionCTA,
-  ServicesAndProductsSection,
 } from '../components/home/ServicesAndModel';
 import { SeoHead } from '../components/ui/SeoHead';
 
@@ -33,16 +32,15 @@ export function HomePage() {
       />
       <HeroSection />
       <CapabilityStrip />
-      <CompanyIntroSection />
       <CoreServicesSection />
+      <BusinessTransformation />
       <CustomSolutionCTA />
-      <ServicesAndProductsSection />
       <IndustriesPreview />
+      <PortfolioPreview />
       <ProcessTimeline />
       <TechnologyMarquee />
       <ProductsPreview />
-      <PortfolioPreview />
-      <BusinessTransformation />
+      <AboutOverviewSection />
       <FounderSection />
       <BlogPreview />
       <FaqSection />
